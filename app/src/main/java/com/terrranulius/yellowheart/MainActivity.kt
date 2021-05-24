@@ -28,6 +28,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.terrranulius.yellowheart.Constants.initiatives
 import com.terrranulius.yellowheart.firebase.FirebaseAuthUtils
 import com.terrranulius.yellowheart.ui.theme.secondaryColor
 
@@ -36,16 +37,18 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         FirebaseAuthUtils.registerListeners(this)
-
         setContent {
-
             val navController = rememberNavController()
             YellowHeartTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.primaryVariant) {
                     NavHost(navController = navController, startDestination = "feed") {
-                        composable("feed") { Feed(navController = navController) }
-                        composable("initiativeDetail") { InitiativeDetail() }
+                        composable("feed") {
+                            Feed(navController = navController)
+                        }
+                        composable("initiativeDetail/{id}") {
+                            InitiativeDetail(initiativeId = it.arguments?.getString("id"))
+                        }
                     }
                 }
             }
@@ -55,34 +58,6 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Feed(navController: NavController) {
-    val initiatives = listOf(
-        Initiative(
-            title = "Help India read",
-            description = "Education is a human right. Help us make it avaialable to everyone",
-            imgRes = R.drawable.image1
-        ),
-        Initiative(
-            title = "Save Kriti",
-            description = "Going Through Cancer and Shit",
-            imgRes = R.drawable.a
-        ),
-        Initiative(
-            title = "Save Kriti",
-            description = "Going Through Cancer and Shit",
-            imgRes = R.drawable.b
-        ),
-        Initiative(
-            title = "Save Kriti",
-            description = "Going Through Cancer and Shit",
-            imgRes = R.drawable.c
-        ),
-        Initiative(
-            title = "Save Kriti",
-            description = "Going Through Cancer and Shit",
-            imgRes = R.drawable.d
-        ),
-        )
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -92,7 +67,7 @@ fun Feed(navController: NavController) {
             Spacer(modifier = Modifier.height(8.dp))
             ImageCard(initiative = initiative, modifier = Modifier.clickable {
                 //TODO CLICKED
-                navController.navigate("initiativeDetail")
+                navController.navigate("initiativeDetail/${initiative.id}")
             })
         }
     }

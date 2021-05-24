@@ -19,14 +19,18 @@ import com.terrranulius.yellowheart.ui.theme.YellowHeartTheme
 
 @Composable
 fun InitiativeDetail(
-    modifier: Modifier = Modifier,
-    initiative: Initiative = Initiative(
-        title = "Save Kriti",
-        description = "Thanks for this great code!\n" +
-                "however,am facing a slight problem . i have a dark background on my login and so if user enters no password while signing up, it shows a red color text saying \"this field cannot be empty\" the problem is the shade of red is too dark to be clearly visible, so i wanted to change it.I tried",
-        imgRes = R.drawable.b,
-    )
+    initiativeId: String?,
+    modifier: Modifier = Modifier
 ) {
+
+    val initiative = Constants.initiatives.find {
+        it.id == initiativeId
+    } ?: Initiative(
+        title = "error",
+        description = "error",
+        imgRes = R.drawable.b
+    )
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -71,7 +75,7 @@ fun InitiativeDetail(
 fun Preview() {
     YellowHeartTheme {
         Surface(color = MaterialTheme.colors.primaryVariant) {
-            InitiativeDetail()
+            InitiativeDetail("sd")
         }
     }
 }
