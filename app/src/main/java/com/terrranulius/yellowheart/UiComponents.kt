@@ -1,7 +1,6 @@
 package com.terrranulius.yellowheart
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -17,10 +16,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.terrranulius.yellowheart.data.Initiative
 import com.terrranulius.yellowheart.ui.theme.YellowHeartTheme
-import com.terrranulius.yellowheart.ui.theme.secondaryColor
 
 @Composable
-fun InitiativeScreen(
+fun InitiativeDetail(
     modifier: Modifier = Modifier,
     initiative: Initiative = Initiative(
         title = "Save Kriti",
@@ -73,7 +71,7 @@ fun InitiativeScreen(
 fun Preview() {
     YellowHeartTheme {
         Surface(color = MaterialTheme.colors.primaryVariant) {
-            InitiativeScreen()
+            InitiativeDetail()
         }
     }
 }

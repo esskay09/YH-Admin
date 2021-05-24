@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -23,9 +24,12 @@ import androidx.compose.ui.unit.dp
 import com.terrranulius.yellowheart.data.Initiative
 import com.terrranulius.yellowheart.ui.theme.YellowHeartTheme
 import androidx.compose.material.ButtonDefaults.buttonColors
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.terrranulius.yellowheart.firebase.FirebaseAuthUtils
 import com.terrranulius.yellowheart.ui.theme.secondaryColor
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,11 +38,15 @@ class MainActivity : ComponentActivity() {
         FirebaseAuthUtils.registerListeners(this)
 
         setContent {
+
+            val navController = rememberNavController()
             YellowHeartTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.primaryVariant) {
-//                    InitiativesMain()
-                    InitiativeScreen()
+                    NavHost(navController = navController, startDestination = "feed") {
+                        composable("feed") { Feed(navController = navController) }
+                        composable("initiativeDetail") { InitiativeDetail() }
+                    }
                 }
             }
         }
@@ -46,7 +54,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun InitiativesMain() {
+fun Feed(navController: NavController) {
     val initiatives = listOf(
         Initiative(
             title = "Help India read",
@@ -73,7 +81,6 @@ fun InitiativesMain() {
             description = "Going Through Cancer and Shit",
             imgRes = R.drawable.d
         ),
-
         )
 
     LazyColumn(
@@ -83,7 +90,10 @@ fun InitiativesMain() {
     ) {
         itemsIndexed(initiatives) { pos: Int, initiative: Initiative ->
             Spacer(modifier = Modifier.height(8.dp))
-            ImageCard(initiative = initiative)
+            ImageCard(initiative = initiative, modifier = Modifier.clickable {
+                //TODO CLICKED
+                navController.navigate("initiativeDetail")
+            })
         }
     }
 }
@@ -94,7 +104,8 @@ fun ImageCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth(),
         shape = RoundedCornerShape(15.dp),
         elevation = 5.dp
     ) {
@@ -133,7 +144,6 @@ fun ImageCard(
 }
 
 
-
 @Composable
 fun HelpButton(modifier: Modifier = Modifier, showText: Boolean = true) {
     Button(
@@ -163,7 +173,7 @@ fun DefaultPreview() {
         // A surface container using the 'background' color from the theme
         Surface(color = MaterialTheme.colors.primaryVariant)
         {
-            InitiativesMain()
+            Feed(rememberNavController())
         }
     }
 }
