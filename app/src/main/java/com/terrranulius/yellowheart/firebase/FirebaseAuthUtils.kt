@@ -19,24 +19,6 @@ object FirebaseAuthUtils {
         auth.addAuthStateListener {
             if (!isSignedIn()) onSignedOut(context)
         }
-
-        registerLifecycleOwners(context)
-    }
-
-    private fun registerLifecycleOwners(context: Activity) {
-        val lifecycleObserver = object : LifecycleObserver {
-
-            @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-            fun onResumed() {
-                if (!isSignedIn()) onSignedOut(context)
-            }
-        }
-
-        if (context is ComponentActivity) {
-            context.lifecycle.addObserver(
-                lifecycleObserver
-            )
-        }
     }
 
     fun signOut(context: Activity) {
