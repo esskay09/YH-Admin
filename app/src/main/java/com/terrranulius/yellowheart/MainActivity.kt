@@ -37,53 +37,10 @@ class MainActivity : ComponentActivity() {
             YellowHeartTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.primaryVariant) {
-                    InitiativesMain()
+//                    InitiativesMain()
+                    InitiativeScreen()
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun ImageCard(
-    initiative: Initiative,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(15.dp),
-        elevation = 5.dp
-    ) {
-        Box(modifier = Modifier.height(240.dp)) {
-            Image(
-                painter = painterResource(id = initiative.imgRes),
-                contentDescription = initiative.description,
-                contentScale = ContentScale.Crop
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Black
-                            ),
-                            startY = 300f
-                        )
-                    )
-            )
-            Text(
-                text = initiative.title, modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(8.dp),
-                style = TextStyle(color = Color.White)
-            )
-            HelpButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(8.dp)
-            )
         }
     }
 }
@@ -132,7 +89,53 @@ fun InitiativesMain() {
 }
 
 @Composable
-fun HelpButton(modifier: Modifier = Modifier) {
+fun ImageCard(
+    initiative: Initiative,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(15.dp),
+        elevation = 5.dp
+    ) {
+        Box(modifier = Modifier.height(240.dp)) {
+            Image(
+                painter = painterResource(id = initiative.imgRes),
+                contentDescription = initiative.description,
+                contentScale = ContentScale.Crop
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black
+                            ),
+                            startY = 300f
+                        )
+                    )
+            )
+            Text(
+                text = initiative.title, modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(8.dp),
+                style = TextStyle(color = Color.White)
+            )
+            HelpButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(8.dp)
+            )
+        }
+    }
+}
+
+
+
+@Composable
+fun HelpButton(modifier: Modifier = Modifier, showText: Boolean = true) {
     Button(
         onClick = { /*TODO*/ }, modifier = modifier,
         colors = buttonColors(
@@ -140,7 +143,9 @@ fun HelpButton(modifier: Modifier = Modifier) {
         )
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Help", modifier = Modifier.padding(end = 2.dp))
+            if (showText) {
+                Text(text = "Help", modifier = Modifier.padding(end = 2.dp))
+            }
             Icon(
                 modifier = Modifier.padding(start = 2.dp),
                 painter = painterResource(id = R.drawable.ic_heart_filled),

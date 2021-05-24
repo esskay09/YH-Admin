@@ -43,7 +43,8 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@android:color/white</item>
 
-        <item name="android:colorBackground">@color/primaryLightColor</item>
+        <item name="statusBarBackground">@color/secondaryColor</item>
+        <item name="android:colorBackground">@color/secondaryLightColor</item>
     </style>
 
 

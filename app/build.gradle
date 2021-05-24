@@ -71,5 +71,7 @@ dependencies {
 
     //Firebase Facebook auth
     implementation 'com.facebook.android:facebook-android-sdk:9.1.1'
-    
+
+    //Compose Navigation
+    implementation "androidx.navigation:navigation-compose:2.4.0-alpha01"
 }
