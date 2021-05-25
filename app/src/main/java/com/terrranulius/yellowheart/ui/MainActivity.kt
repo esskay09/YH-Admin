@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart
+package com.terrranulius.yellowheart.ui
 
 import android.app.Activity
 import android.content.Context
@@ -9,24 +9,13 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.ColorRes
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
@@ -36,9 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.terrranulius.yellowheart.Constants.RT_DETAIL
 import com.terrranulius.yellowheart.Constants.RT_FEED
 import com.terrranulius.yellowheart.Constants.RT_SPLASH
-import com.terrranulius.yellowheart.Constants.initiatives
-import com.terrranulius.yellowheart.components.*
-import com.terrranulius.yellowheart.data.Initiative
+import com.terrranulius.yellowheart.ui.components.*
 import com.terrranulius.yellowheart.firebase.FirebaseAuthUtils
 import com.terrranulius.yellowheart.ui.theme.YellowHeartTheme
 

@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.components
+package com.terrranulius.yellowheart.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

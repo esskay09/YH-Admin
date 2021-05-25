@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.components
+package com.terrranulius.yellowheart.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -12,8 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.terrranulius.yellowheart.Constants
 import com.terrranulius.yellowheart.R
+import com.terrranulius.yellowheart.data.DummyData.initiatives
 import com.terrranulius.yellowheart.data.Initiative
 
 @Composable
@@ -22,7 +22,7 @@ fun InitiativeDetail(
     modifier: Modifier = Modifier,
     onHelpClick: () -> Unit
 ) {
-    val initiative = Constants.initiatives.find {
+    val initiative = initiatives.find {
         it.id == initiativeId
     } ?: Initiative(
         title = "error",
