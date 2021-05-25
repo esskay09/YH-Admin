@@ -39,3 +39,19 @@ fun YellowHeartTheme(
         content = content
     )
 }
+
+@Composable
+fun SplashTheme(
+    content: @Composable () -> Unit
+){
+    val colors = LightColorPalette.copy(
+        primaryVariant = secondaryColor
+    )
+
+    MaterialTheme(
+        colors = colors,
+        typography = Typography,
+        shapes = Shapes,
+        content = content
+    )
+}
