@@ -25,13 +25,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.terrranulius.yellowheart.data.DummyData
-import com.terrranulius.yellowheart.data.Initiative
 import com.terrranulius.yellowheart.other.Constants.RT_DETAIL
 import com.terrranulius.yellowheart.other.Constants.RT_FEED
 import com.terrranulius.yellowheart.other.Constants.RT_SPLASH
 import com.terrranulius.yellowheart.ui.components.*
 import com.terrranulius.yellowheart.firebase.FirebaseAuthUtils
 import com.terrranulius.yellowheart.ui.theme.YellowHeartTheme
+import com.terrranulius.yellowheart.R
 
 
 class MainActivity : ComponentActivity() {
@@ -127,7 +127,7 @@ fun DefaultPreview() {
         // A surface container using the 'background' color from the theme
         Surface(color = MaterialTheme.colors.primaryVariant)
         {
-            Feed(rememberNavController(), onHelpClick = {})
+            Feed(rememberNavController(), onHelpClick = {}, onChildClicked = {})
         }
     }
 }
