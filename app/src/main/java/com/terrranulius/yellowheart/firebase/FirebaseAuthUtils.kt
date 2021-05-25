@@ -1,13 +1,9 @@
 package com.terrranulius.yellowheart.firebase
 
 import android.app.Activity
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
-import com.terrranulius.yellowheart.Constants.RC_SIGN_IN
+import com.terrranulius.yellowheart.other.Constants.RC_SIGN_IN
 import com.terrranulius.yellowheart.R
 
 object FirebaseAuthUtils {

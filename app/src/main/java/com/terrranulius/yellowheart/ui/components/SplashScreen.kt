@@ -11,7 +11,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.airbnb.lottie.LottieAnimationView
-import com.terrranulius.yellowheart.Constants.RT_FEED
+import com.terrranulius.yellowheart.other.Constants.RT_FEED
 import com.terrranulius.yellowheart.R
 
 @Composable

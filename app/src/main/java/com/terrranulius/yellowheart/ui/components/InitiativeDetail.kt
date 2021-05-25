@@ -12,23 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.terrranulius.yellowheart.R
-import com.terrranulius.yellowheart.data.DummyData.initiatives
 import com.terrranulius.yellowheart.data.Initiative
 
 @Composable
 fun InitiativeDetail(
-    initiativeId: String?,
+    initiative: Initiative,
     modifier: Modifier = Modifier,
     onHelpClick: () -> Unit
 ) {
-    val initiative = initiatives.find {
-        it.id == initiativeId
-    } ?: Initiative(
-        title = "error",
-        description = "error",
-        imgRes = R.drawable.b
-    )
     Box(
         modifier = modifier
             .fillMaxSize()

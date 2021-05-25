@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -22,9 +24,11 @@ import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.terrranulius.yellowheart.Constants.RT_DETAIL
-import com.terrranulius.yellowheart.Constants.RT_FEED
-import com.terrranulius.yellowheart.Constants.RT_SPLASH
+import com.terrranulius.yellowheart.data.DummyData
+import com.terrranulius.yellowheart.data.Initiative
+import com.terrranulius.yellowheart.other.Constants.RT_DETAIL
+import com.terrranulius.yellowheart.other.Constants.RT_FEED
+import com.terrranulius.yellowheart.other.Constants.RT_SPLASH
 import com.terrranulius.yellowheart.ui.components.*
 import com.terrranulius.yellowheart.firebase.FirebaseAuthUtils
 import com.terrranulius.yellowheart.ui.theme.YellowHeartTheme
@@ -69,6 +73,12 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.primaryVariant) {
 
+                    val selectedInitiative = remember {
+                        mutableStateOf(
+                            DummyData.initiatives[2]
+                        )
+                    }
+
                     NavHost(navController = navController, startDestination = RT_SPLASH) {
                         composable(RT_SPLASH) {
                             SplashScreen(
@@ -77,11 +87,14 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(RT_FEED) {
-                            Feed(navController = navController, onHelpClick = { onHelpClick() })
+                            Feed(navController = navController, onHelpClick = { onHelpClick() },
+                                onChildClicked = {
+                                    selectedInitiative.value = it
+                                })
                         }
                         composable(RT_DETAIL) {
                             InitiativeDetail(
-                                initiativeId = it.arguments?.getString("id"),
+                                initiative = selectedInitiative.value,
                                 onHelpClick = { onHelpClick() })
                         }
                     }
@@ -91,6 +104,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
 
     private fun onHelpClick() {
         //TODO
