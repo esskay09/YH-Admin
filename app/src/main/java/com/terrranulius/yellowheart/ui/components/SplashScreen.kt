@@ -27,7 +27,6 @@ fun SplashScreen(modifier: Modifier = Modifier, navController: NavController) {
 
                 customView.addAnimatorListener(object: Animator.AnimatorListener{
                     override fun onAnimationStart(animation: Animator?) {
-
                     }
 
                     override fun onAnimationEnd(animation: Animator?) {

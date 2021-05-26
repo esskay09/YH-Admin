@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         FirebaseAuthUtils.registerListeners(this)
 
+
         setContent {
             val navController = rememberNavController()
             val context = LocalContext.current
@@ -99,16 +100,12 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-
-
             }
         }
     }
 
-
     private fun onHelpClick() {
         //TODO
-        Log.d("shit", "Help Clicked!")
     }
 
     private fun setStatusBarColor(@ColorRes colorRes: Int, context: Context) {
