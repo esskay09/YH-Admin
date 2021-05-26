@@ -1,6 +1,7 @@
-package com.terrranulius.yellowheart.data
+package com.terranullius.yellowheart.data
 
-import com.terrranulius.yellowheart.R
+import terranullius.yellowheart.R
+
 
 object DummyData {
 

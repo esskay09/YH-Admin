@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.ui.theme
+package com.terranullius.yellowheart.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

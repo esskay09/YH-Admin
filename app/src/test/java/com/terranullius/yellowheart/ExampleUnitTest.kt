@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart
+package com.terranullius.yellowheart
 
 import org.junit.Test
 

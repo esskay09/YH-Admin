@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.ui.components
+package com.terranullius.yellowheart.ui.components
 
 import android.animation.Animator
 import androidx.compose.material.MaterialTheme
@@ -11,8 +11,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.airbnb.lottie.LottieAnimationView
-import com.terrranulius.yellowheart.other.Constants.RT_FEED
-import com.terrranulius.yellowheart.R
+import com.terranullius.yellowheart.other.Constants.RT_FEED
+import terranullius.yellowheart.R
+
 
 @Composable
 fun SplashScreen(modifier: Modifier = Modifier, navController: NavController) {

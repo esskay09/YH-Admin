@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.ui.components
+package com.terranullius.yellowheart.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
@@ -11,9 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.terrranulius.yellowheart.data.DummyData
-import com.terrranulius.yellowheart.data.Initiative
-import com.terrranulius.yellowheart.other.Constants.RT_DETAIL
+import com.terranullius.yellowheart.data.DummyData
+import com.terranullius.yellowheart.data.Initiative
+import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 
 @Composable
 fun Feed(

@@ -1,13 +1,13 @@
-package com.terrranulius.yellowheart.payment
+package com.terranullius.yellowheart.payment
 
 import android.app.Activity
-import androidx.lifecycle.Lifecycle.Event.ON_START
-import androidx.lifecycle.Lifecycle.Event.ON_STOP
+import androidx.lifecycle.Lifecycle.Event.*
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 import com.paykun.sdk.PaykunApiCall
 import com.paykun.sdk.eventbus.GlobalBus
+import com.terranullius.yellowheart.data.User
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -15,7 +15,7 @@ object PaymentUtils {
 
     private lateinit var jsonObject: JSONObject
 
-    fun registerPaymentListeners(
+    fun registerListeners(
         context: Activity
     ) {
         (context as LifecycleOwner).lifecycle.addObserver(
@@ -30,25 +30,24 @@ object PaymentUtils {
                 fun onStop() {
                     GlobalBus.getBus().unregister(context)
                 }
-
             }
         )
     }
 
-    fun initiatePayment(context: Activity) {
-        createPaykunObject()
+    fun initiatePayment(context: Activity, user: User) {
+        createPaykunObject(user)
         PaykunApiCall.Builder(context).sendJsonObject(jsonObject)
     }
 
-    //TODO ADD PARAMS
-    fun createPaykunObject() {
+    //TODO ADD PARAMS & SECURE ACCESS TOKEN
+    private fun createPaykunObject(user: User) {
         jsonObject = JSONObject()
         try {
             jsonObject.put("merchant_id", "005181070659984")
-            jsonObject.put("access_token", "0A156FBC050CAAA38C2723A8192C8B93")
-            jsonObject.put("customer_name", "Shaique Khan")
-            jsonObject.put("customer_email", "esskay099@gmail.com")
-            jsonObject.put("customer_phone", "9334805466")
+            jsonObject.put("access_token", "D644432ACBF4A4B71B62ED32A3CF2DED")
+            jsonObject.put("customer_name", user.name)
+            jsonObject.put("customer_email", user.email)
+            jsonObject.put("customer_phone", user.phone)
             jsonObject.put("product_name", "Heart")
             jsonObject.put(
                 "order_no",

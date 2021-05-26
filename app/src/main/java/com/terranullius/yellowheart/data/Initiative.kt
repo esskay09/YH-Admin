@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.data
+package com.terranullius.yellowheart.data
 
 import androidx.annotation.DrawableRes
 import java.util.*

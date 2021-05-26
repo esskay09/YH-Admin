@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.ui.components
+package com.terranullius.yellowheart.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,7 +15,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.terrranulius.yellowheart.data.Initiative
+import com.terranullius.yellowheart.data.Initiative
 
 @Composable
 fun FeedImageCard(

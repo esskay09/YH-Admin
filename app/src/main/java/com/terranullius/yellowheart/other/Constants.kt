@@ -1,4 +1,4 @@
-package com.terrranulius.yellowheart.other
+package com.terranullius.yellowheart.other
 
 object Constants {
 
