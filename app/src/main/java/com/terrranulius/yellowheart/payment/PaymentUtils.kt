@@ -6,31 +6,33 @@ import androidx.lifecycle.Lifecycle.Event.ON_STOP
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
+import com.paykun.sdk.PaykunApiCall
+import com.paykun.sdk.eventbus.GlobalBus
 import org.json.JSONException
 import org.json.JSONObject
 
-object PaymentUtils{
+object PaymentUtils {
 
     private lateinit var jsonObject: JSONObject
 
     fun registerPaymentListeners(
         context: Activity
-    ){
-         (context as LifecycleOwner).lifecycle.addObserver(
-             object: LifecycleObserver{
+    ) {
+        (context as LifecycleOwner).lifecycle.addObserver(
+            object : LifecycleObserver {
 
-                 @OnLifecycleEvent(ON_START)
-                 fun onStarted(){
-                     GlobalBus.getBus().register(context)
-                 }
+                @OnLifecycleEvent(ON_START)
+                fun onStarted() {
+                    GlobalBus.getBus().register(context)
+                }
 
-                 @OnLifecycleEvent(ON_STOP)
-                 fun onStop(){
+                @OnLifecycleEvent(ON_STOP)
+                fun onStop() {
+                    GlobalBus.getBus().unregister(context)
+                }
 
-                 }
-
-             }
-         )
+            }
+        )
     }
 
     fun initiatePayment(context: Activity) {
