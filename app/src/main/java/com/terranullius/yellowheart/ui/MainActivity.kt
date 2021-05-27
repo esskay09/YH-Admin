@@ -51,13 +51,12 @@ class MainActivity : ComponentActivity() {
         //TODO SIDE EFFECT USE ACCOMPANIST
 
         //TODO REMOVE
-        var dummydata: Result<> = Result.Loading
-        dummydata = Result.Success()
+        var dummydata: Result<List<Initiative>> = Result.Loading
 
         lifecycleScope.launchWhenCreated {
-            dummydata = FirestoreUtils.getInitiatives().map {
+            dummydata = Result.Success(FirestoreUtils.getInitiatives().map {
                 it.toInitiative()
-            }
+            })
         }
 
         FirebaseAuthUtils.registerListeners(this)
@@ -121,7 +120,8 @@ class MainActivity : ComponentActivity() {
                                 onChildClicked = {
                                     selectedInitiative.value = it
                                 },
-                                initiatives = dummydata)
+                                initiatives = dummydata
+                            )
                         }
                         composable(RT_DETAIL) {
                             InitiativeDetail(

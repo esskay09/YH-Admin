@@ -13,28 +13,33 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.other.Constants.RT_DETAIL
+import com.terranullius.yellowheart.utils.Result
 
 @Composable
 fun Feed(
     navController: NavController,
     onHelpClick: () -> Unit,
     onChildClicked: (initiative: Initiative) -> Unit,
-    initiatives: List<Initiative>
+    initiatives: Result<List<Initiative>>
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-    ) {
-        itemsIndexed(initiatives) { pos: Int, initiative: Initiative ->
-            Spacer(modifier = Modifier.height(8.dp))
-            FeedImageCard(
-                initiative = initiative, modifier = Modifier.clickable {
-                    onChildClicked(initiative)
-                    navController.navigate(RT_DETAIL)
-                },
-                onHelpClick = onHelpClick
-            )
+    when (initiatives) {
+        is Result.Success -> LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+        ) {
+            itemsIndexed(initiatives.data) { pos: Int, initiative: Initiative ->
+                Spacer(modifier = Modifier.height(8.dp))
+                FeedImageCard(
+                    initiative = initiative, modifier = Modifier.clickable {
+                        onChildClicked(initiative)
+                        navController.navigate(RT_DETAIL)
+                    },
+                    onHelpClick = onHelpClick
+                )
+            }
         }
+        is Result.Error -> TODO()
+        Result.Loading -> CircularProgress()
     }
 }
