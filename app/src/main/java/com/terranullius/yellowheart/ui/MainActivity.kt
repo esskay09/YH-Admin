@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
@@ -31,18 +30,14 @@ import androidx.navigation.compose.rememberNavController
 import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
 import com.terranullius.yellowheart.data.Initiative
-import com.terranullius.yellowheart.data.toInitiative
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
-import com.terranullius.yellowheart.firebase.FirestoreUtils
 import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 import com.terranullius.yellowheart.other.Constants.RT_FEED
 import com.terranullius.yellowheart.other.Constants.RT_SPLASH
 import com.terranullius.yellowheart.payment.PaymentUtils
 import com.terranullius.yellowheart.ui.components.*
 import com.terranullius.yellowheart.ui.theme.YellowHeartTheme
-import com.terranullius.yellowheart.utils.Result
 import com.terranullius.yellowheart.viewmodels.MainViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheart.R
@@ -106,7 +101,15 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    if (FirebaseAuthUtils.isSignedIn()) {
+                    //TODO MOVE AUTHUTILS TO VIEWMODEL
+
+                    viewModel.refreshInitiatives()
+
+                    if (!FirebaseAuthUtils.isSignedIn()) {
+                        FirebaseAuthUtils.onSignIn(LocalContext.current as Activity)
+                    } else {
+
+
                         NavHost(navController = navController, startDestination = RT_SPLASH) {
                             composable(RT_SPLASH) {
                                 SplashScreen(
@@ -136,7 +139,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onHelpClick() {
-        //TODO
         val currentUser = FirebaseAuthUtils.getUser()
         PaymentUtils.initiatePayment(this@MainActivity, currentUser)
     }

@@ -1,6 +1,10 @@
 package com.terranullius.yellowheart.firebase
 
 import android.app.Activity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.OnLifecycleEvent
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 import com.terranullius.yellowheart.data.User
@@ -14,8 +18,22 @@ object FirebaseAuthUtils {
 
     fun registerListeners(context: Activity) {
 
+        if (context is LifecycleOwner) {
+            context.lifecycle.addObserver(object : LifecycleObserver {
+                @OnLifecycleEvent(Lifecycle.Event.ON_START)
+                fun onStart() {
+                    onSignIn(context)
+                }
+
+                @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+                fun onStop() {
+                    onSignIn(context)
+                }
+            })
+        }
+
         auth.addAuthStateListener {
-            if (!isSignedIn()) onSignedOut(context)
+            if (!isSignedIn()) onSignIn(context)
         }
     }
 
@@ -23,7 +41,7 @@ object FirebaseAuthUtils {
         AuthUI.getInstance()
             .signOut(context)
             .addOnCompleteListener {
-                onSignedOut(context)
+                onSignIn(context)
             }
     }
 
@@ -35,21 +53,21 @@ object FirebaseAuthUtils {
         phone = auth.currentUser?.phoneNumber ?: "Enter Phone Number"
     ) else throw IllegalArgumentException()
 
-    private fun onSignedOut(context: Activity) {
-        context.startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .setTheme(R.style.LoginTheme)
-                .build(),
-            RC_SIGN_IN
-        )
+    fun onSignIn(context: Activity) {
+        if (!isSignedIn()) {
+            context.startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setAvailableProviders(providers)
+                    .setTheme(R.style.LoginTheme)
+                    .build(),
+                RC_SIGN_IN
+            )
+        }
     }
 
     private val providers = arrayListOf(
         AuthUI.IdpConfig.GoogleBuilder().build(),
         AuthUI.IdpConfig.FacebookBuilder().build()
     )
-
-
 }
