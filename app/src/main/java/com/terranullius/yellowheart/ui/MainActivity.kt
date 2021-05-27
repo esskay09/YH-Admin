@@ -10,12 +10,15 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
@@ -38,26 +41,21 @@ import com.terranullius.yellowheart.payment.PaymentUtils
 import com.terranullius.yellowheart.ui.components.*
 import com.terranullius.yellowheart.ui.theme.YellowHeartTheme
 import com.terranullius.yellowheart.utils.Result
+import com.terranullius.yellowheart.viewmodels.MainViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheart.R
 
 
 class MainActivity : ComponentActivity() {
+    private val viewModel by viewModels<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         //TODO CREATE RESOURCE WRAPPER
         //TODO SIDE EFFECT USE ACCOMPANIST
-
-        //TODO REMOVE
-        var dummydata: Result<List<Initiative>> = Result.Loading
-
-        lifecycleScope.launchWhenCreated {
-            dummydata = Result.Success(FirestoreUtils.getInitiatives().map {
-                it.toInitiative()
-            })
-        }
 
         FirebaseAuthUtils.registerListeners(this)
         PaymentUtils.registerListeners(this)
@@ -66,6 +64,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val context = LocalContext.current
 
+            val initiativesDummy = viewModel.dummyFlowData.collectAsState()
 
             navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
 
@@ -107,26 +106,28 @@ class MainActivity : ComponentActivity() {
                         )
                     }
 
-                    NavHost(navController = navController, startDestination = RT_SPLASH) {
-                        composable(RT_SPLASH) {
-                            SplashScreen(
-                                modifier = Modifier.fillMaxSize(),
-                                navController = navController
-                            )
-                        }
-                        composable(RT_FEED) {
-                            Feed(
-                                navController = navController, onHelpClick = { onHelpClick() },
-                                onChildClicked = {
-                                    selectedInitiative.value = it
-                                },
-                                initiatives = dummydata
-                            )
-                        }
-                        composable(RT_DETAIL) {
-                            InitiativeDetail(
-                                initiative = selectedInitiative.value,
-                                onHelpClick = { onHelpClick() })
+                    if (FirebaseAuthUtils.isSignedIn()) {
+                        NavHost(navController = navController, startDestination = RT_SPLASH) {
+                            composable(RT_SPLASH) {
+                                SplashScreen(
+                                    modifier = Modifier.fillMaxSize(),
+                                    navController = navController
+                                )
+                            }
+                            composable(RT_FEED) {
+                                Feed(
+                                    navController = navController, onHelpClick = { onHelpClick() },
+                                    onChildClicked = {
+                                        selectedInitiative.value = it
+                                    },
+                                    initiatives = initiativesDummy.value
+                                )
+                            }
+                            composable(RT_DETAIL) {
+                                InitiativeDetail(
+                                    initiative = selectedInitiative.value,
+                                    onHelpClick = { onHelpClick() })
+                            }
                         }
                     }
                 }

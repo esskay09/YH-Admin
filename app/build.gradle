@@ -59,6 +59,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    implementation "androidx.activity:activity-ktx:1.2.3"
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:28.0.1')

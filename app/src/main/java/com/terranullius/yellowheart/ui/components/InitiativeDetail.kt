@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.terranullius.yellowheart.data.Initiative
 
+//TODO SHOW FEED AND REQUEST OBJECTS ONLY IF SIGNED IN
+
 @Composable
 fun InitiativeDetail(
     initiative: Initiative,
