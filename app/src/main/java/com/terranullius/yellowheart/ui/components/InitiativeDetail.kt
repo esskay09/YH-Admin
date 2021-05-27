@@ -1,6 +1,9 @@
 package com.terranullius.yellowheart.ui.components
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -10,7 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
@@ -22,47 +27,53 @@ fun InitiativeDetail(
     modifier: Modifier = Modifier,
     onHelpClick: () -> Unit
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(8.dp)
-    ) {
-        Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.Start) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(270.dp),
-                shape = RoundedCornerShape(15.dp),
-                elevation = 5.dp
-            ) {
-                Image(
-                    modifier = Modifier.fillMaxSize(),
-                    painter = rememberCoilPainter(initiative.imgUrl),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = ""
+    val
+
+    Surface(){
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
+            Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.Start) {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(270.dp),
+                    shape = RoundedCornerShape(15.dp),
+                    elevation = 5.dp
+                ) {
+                    Image(
+                        modifier = Modifier.fillMaxSize(),
+                        painter = rememberCoilPainter(initiative.imgUrl),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = ""
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = initiative.name,
+                    style = MaterialTheme.typography.h4.copy(
+                        fontFamily = FontFamily.Cursive
+                    )
+                )
+                Spacer(Modifier.height(48.dp))
+                Text(
+                    text = initiative.description,
+                    style = MaterialTheme.typography.body1.copy(
+//                    fontFamily = FontFamily
+                    )
                 )
             }
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = initiative.name,
-                style = MaterialTheme.typography.h4.copy(
-                    fontFamily = FontFamily.Cursive
-                )
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = initiative.description,
-                style = MaterialTheme.typography.body1.copy(
-//                    fontFamily = FontFamily
-                )
+            HelpButton(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                showText = false,
+                //onClick = onHelpClick //TODO UNCOMMENT
+
             )
         }
-        HelpButton(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(bottom = 12.dp), showText = false,
-            onClick = onHelpClick
-        )
     }
 }
