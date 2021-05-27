@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.coil.rememberCoilPainter
 import com.terranullius.yellowheart.data.Initiative
 
 @Composable
@@ -34,14 +35,14 @@ fun InitiativeDetail(
                 elevation = 5.dp
             ) {
                 Image(
-                    painter = painterResource(id = initiative.imgRes),
+                    painter = rememberCoilPainter(initiative.imgUrl),
                     contentScale = ContentScale.Crop,
                     contentDescription = ""
                 )
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                text = initiative.title,
+                text = initiative.name,
                 style = MaterialTheme.typography.h3
             )
             Spacer(Modifier.height(8.dp))

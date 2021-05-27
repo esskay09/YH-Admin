@@ -14,13 +14,12 @@ import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
@@ -28,14 +27,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
-import com.terranullius.yellowheart.data.DummyData
+import com.terranullius.yellowheart.data.Initiative
+import com.terranullius.yellowheart.data.toInitiative
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
+import com.terranullius.yellowheart.firebase.FirestoreUtils
 import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 import com.terranullius.yellowheart.other.Constants.RT_FEED
 import com.terranullius.yellowheart.other.Constants.RT_SPLASH
 import com.terranullius.yellowheart.payment.PaymentUtils
 import com.terranullius.yellowheart.ui.components.*
 import com.terranullius.yellowheart.ui.theme.YellowHeartTheme
+import com.terranullius.yellowheart.utils.Result
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheart.R
@@ -45,6 +47,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //TODO CREATE RESOURCE WRAPPER
+        //TODO SIDE EFFECT USE ACCOMPANIST
+
+        //TODO REMOVE
+        var dummydata: Result<> = Result.Loading
+        dummydata = Result.Success()
+
+        lifecycleScope.launchWhenCreated {
+            dummydata = FirestoreUtils.getInitiatives().map {
+                it.toInitiative()
+            }
+        }
+
         FirebaseAuthUtils.registerListeners(this)
         PaymentUtils.registerListeners(this)
 
@@ -52,7 +67,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val context = LocalContext.current
 
-            //TODO SIDE EFFECT
+
             navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
 
                 var window: Window? = null
@@ -72,7 +87,7 @@ class MainActivity : ComponentActivity() {
 
                 if (window != null) {
                     when (navDestination.route) {
-                        RT_SPLASH -> setStatusBarColor(R.color.secondaryColor, context)
+                        RT_SPLASH -> setStatusBarColor(R.color.secondaryLightColor, context)
                         else -> setStatusBarColor(R.color.primaryLightColor, context)
                     }
                 }
@@ -84,7 +99,12 @@ class MainActivity : ComponentActivity() {
 
                     val selectedInitiative = remember {
                         mutableStateOf(
-                            DummyData.initiatives[2]
+                            Initiative(
+                                name = "",
+                                description = "",
+                                isPayable = true,
+                                imgUrl = ""
+                            )
                         )
                     }
 
@@ -96,10 +116,12 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(RT_FEED) {
-                            Feed(navController = navController, onHelpClick = { onHelpClick() },
+                            Feed(
+                                navController = navController, onHelpClick = { onHelpClick() },
                                 onChildClicked = {
                                     selectedInitiative.value = it
-                                })
+                                },
+                                initiatives = dummydata)
                         }
                         composable(RT_DETAIL) {
                             InitiativeDetail(

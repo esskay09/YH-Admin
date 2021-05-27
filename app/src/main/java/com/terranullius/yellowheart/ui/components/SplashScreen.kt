@@ -18,7 +18,7 @@ import terranullius.yellowheart.R
 @Composable
 fun SplashScreen(modifier: Modifier = Modifier, navController: NavController) {
 
-        Surface(modifier = modifier, color = MaterialTheme.colors.secondary) {
+        Surface(modifier = modifier, color = MaterialTheme.colors.secondaryVariant) {
             val visibility = remember { mutableStateOf(0) }
             val context = LocalContext.current
             val customView = remember { LottieAnimationView(context) }

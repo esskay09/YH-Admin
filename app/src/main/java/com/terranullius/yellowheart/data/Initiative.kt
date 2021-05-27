@@ -4,8 +4,9 @@ import androidx.annotation.DrawableRes
 import java.util.*
 
 data class Initiative(
-    val id: String = UUID.randomUUID().toString(),
-    var title: String,
+    val id: String = "",
+    var name: String,
     var description: String,
-    @DrawableRes var imgRes: Int
+    var imgUrl: String,
+    val isPayable: Boolean = true
 )

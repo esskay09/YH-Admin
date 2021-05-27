@@ -11,7 +11,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.terranullius.yellowheart.data.DummyData
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 
@@ -19,14 +18,15 @@ import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 fun Feed(
     navController: NavController,
     onHelpClick: () -> Unit,
-    onChildClicked: (initiative: Initiative) -> Unit
+    onChildClicked: (initiative: Initiative) -> Unit,
+    initiatives: List<Initiative>
 ) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(8.dp),
     ) {
-        itemsIndexed(DummyData.initiatives) { pos: Int, initiative: Initiative ->
+        itemsIndexed(initiatives) { pos: Int, initiative: Initiative ->
             Spacer(modifier = Modifier.height(8.dp))
             FeedImageCard(
                 initiative = initiative, modifier = Modifier.clickable {
