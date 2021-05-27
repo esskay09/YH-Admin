@@ -22,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
@@ -39,7 +38,6 @@ import com.terranullius.yellowheart.payment.PaymentUtils
 import com.terranullius.yellowheart.ui.components.*
 import com.terranullius.yellowheart.ui.theme.YellowHeartTheme
 import com.terranullius.yellowheart.viewmodels.MainViewModel
-import kotlinx.coroutines.flow.collect
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheart.R
@@ -59,7 +57,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val context = LocalContext.current
-            val isSignedIn =  viewModel.isSignedInFlow.collectAsState()
+            val isSignedIn = viewModel.isSignedInFlow.collectAsState()
             val initiativesDummy = viewModel.initiativesFlow.collectAsState()
 
             navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
@@ -95,7 +93,8 @@ class MainActivity : ComponentActivity() {
                                 name = "",
                                 description = "",
                                 isPayable = true,
-                                imgUrl = ""
+                                imgUrl = "",
+                                order = 0
                             )
                         )
                     }

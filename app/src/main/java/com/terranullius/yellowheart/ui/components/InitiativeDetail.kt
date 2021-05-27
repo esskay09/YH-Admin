@@ -11,11 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
 import com.terranullius.yellowheart.data.Initiative
-
-//TODO SHOW FEED AND REQUEST OBJECTS ONLY IF SIGNED IN
 
 @Composable
 fun InitiativeDetail(
@@ -32,11 +31,12 @@ fun InitiativeDetail(
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(260.dp),
+                    .height(270.dp),
                 shape = RoundedCornerShape(15.dp),
                 elevation = 5.dp
             ) {
                 Image(
+                    modifier = Modifier.fillMaxSize(),
                     painter = rememberCoilPainter(initiative.imgUrl),
                     contentScale = ContentScale.Crop,
                     contentDescription = ""
@@ -45,12 +45,16 @@ fun InitiativeDetail(
             Spacer(Modifier.height(8.dp))
             Text(
                 text = initiative.name,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.h4.copy(
+                    fontFamily = FontFamily.Cursive
+                )
             )
             Spacer(Modifier.height(8.dp))
             Text(
                 text = initiative.description,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.body1.copy(
+//                    fontFamily = FontFamily
+                )
             )
         }
         HelpButton(

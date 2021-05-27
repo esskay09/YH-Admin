@@ -13,5 +13,6 @@ object Constants {
     const val FB_FIELD_DESCRIPTION = "description"
     const val FB_FIELD_IMG_URL = "imgUrl"
     const val FB_FIELD_IS_PAYABLE = "isPayable"
+    const val FB_FIELD_ORDER = "order"
 
 }

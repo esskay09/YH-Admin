@@ -13,6 +13,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
 
+    //TODO ADD FEATURE TO LISTEN TO REFRESH LIVE
+
     private val _initiativesFlow = MutableStateFlow<Result<List<Initiative>>>(Result.Loading)
     val initiativesFlow: StateFlow<Result<List<Initiative>>>
         get() = _initiativesFlow
@@ -25,17 +27,19 @@ class MainViewModel : ViewModel() {
 
     fun onSignedIn() {
         _isSignedIn.value = true
-        if (isFirstRun){
+        if (isFirstRun) {
             refreshInitiatives()
             isFirstRun = false
         }
     }
 
-    fun refreshInitiatives() {
+    private fun refreshInitiatives() {
         if (_isSignedIn.value) {
             viewModelScope.launch {
                 _initiativesFlow.value = Result.Success(FirestoreUtils.getInitiatives().map {
                     it.toInitiative()
+                }.sortedBy {
+                    it.order
                 })
             }
         }

@@ -40,6 +40,6 @@ fun Feed(
             }
         }
         is Result.Error -> TODO()
-        Result.Loading -> CircularProgress()
+        Result.Loading -> CircularProgress(modifier = Modifier.fillMaxSize())
     }
 }

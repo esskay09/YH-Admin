@@ -24,16 +24,7 @@ object FirebaseAuthUtils {
                 fun onStart() {
                     onSignIn(context)
                 }
-
-                @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-                fun onStop() {
-                    onSignIn(context)
-                }
             })
-        }
-
-        auth.addAuthStateListener {
-            if (!isSignedIn()) onSignIn(context)
         }
     }
 
