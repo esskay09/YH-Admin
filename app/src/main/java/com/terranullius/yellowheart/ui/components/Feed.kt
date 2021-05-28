@@ -19,7 +19,7 @@ import com.terranullius.yellowheart.utils.Result
 fun Feed(
     navController: NavController,
     onHelpClick: () -> Unit,
-    onChildClicked: (initiative: Initiative) -> Unit,
+    onInitiativeClicked: (initiative: Initiative) -> Unit,
     initiatives: Result<List<Initiative>>
 ) {
     when (initiatives) {
@@ -32,7 +32,7 @@ fun Feed(
                 Spacer(modifier = Modifier.height(8.dp))
                 FeedImageCard(
                     initiative = initiative, modifier = Modifier.clickable {
-                        onChildClicked(initiative)
+                        onInitiativeClicked(initiative)
                         navController.navigate(RT_DETAIL)
                     },
                     onHelpClick = onHelpClick

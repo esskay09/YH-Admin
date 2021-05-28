@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +21,7 @@ import com.terranullius.yellowheart.data.Initiative
 fun InitiativeDetail(
     initiative: Initiative,
     modifier: Modifier = Modifier,
-    onHelpClick: () -> Unit
+    onBottomBarItemClicked: (String) -> Unit
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -83,22 +82,11 @@ fun InitiativeDetail(
                     )
                 }
 
-                if (false) HelpButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .padding(bottom = 12.dp),
-                    showText = false
-                )
-                //onClick = onHelpClick //TODO UNCOMMENT
-                {
-                    currentColor.value = colorList.find {
-                        it != currentColor.value
-                    }!!
-                }
-
                 BottomBar(
-                    modifier = Modifier.align(Alignment.BottomStart)
+                    modifier = Modifier.align(Alignment.BottomStart),
+                    onBottomBarItemClicked = {
+                        onBottomBarItemClicked(it)
+                    }
                 )
             }
         }

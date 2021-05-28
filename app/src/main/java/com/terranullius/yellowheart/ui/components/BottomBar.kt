@@ -9,6 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.terranullius.yellowheart.other.Constants.AB_HELP
+import com.terranullius.yellowheart.other.Constants.AB_JOIN
+import com.terranullius.yellowheart.other.Constants.AB_SHARE
 import terranullius.yellowheart.R
 
 @Composable
@@ -26,26 +30,26 @@ fun BottomBar(
                         contentDescription = ""
                     )
                 },
-                label = { Text(text = "Download") },
+                label = { Text(text = "Join") },
                 selected = false,
                 onClick = {
-
+                    onBottomBarItemClicked(AB_JOIN)
                 },
-                alwaysShowLabel = false
+                alwaysShowLabel = true
             )
             BottomNavigationItem(
                 icon = {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_heart_filled),
-                        contentDescription = ""
+                        contentDescription = "Help"
                     )
                 },
-                label = { Text(text = "Download") },
+                label = { Text(text = "Help") },
                 selected = false,
                 onClick = {
-
+                    onBottomBarItemClicked(AB_HELP)
                 },
-                alwaysShowLabel = false
+                alwaysShowLabel = true
             )
             BottomNavigationItem(
                 icon = {
@@ -54,14 +58,22 @@ fun BottomBar(
                         contentDescription = ""
                     )
                 },
-                label = { Text(text = "Download") },
+                label = { Text(text = "Share") },
                 selected = false,
                 onClick = {
-
+                    onBottomBarItemClicked(AB_SHARE)
                 },
-                alwaysShowLabel = false
+                alwaysShowLabel = true
             )
         }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun Psreview() {
+    BottomBar(modifier = Modifier.fillMaxWidth(), onBottomBarItemClicked = {
+
+    })
 }
 

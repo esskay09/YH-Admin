@@ -14,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.collectAsState
@@ -33,6 +32,7 @@ import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
+import com.terranullius.yellowheart.other.Constants.AB_HELP
 import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 import com.terranullius.yellowheart.other.Constants.RT_FEED
 import com.terranullius.yellowheart.other.Constants.RT_SPLASH
@@ -90,44 +90,45 @@ class MainActivity : ComponentActivity() {
 
             if (isSignedIn.value) YellowHeartTheme {
 
-                    Surface(color = MaterialTheme.colors.primaryVariant) {
-                        val selectedInitiative = remember {
-                            mutableStateOf(
-                                Initiative(
-                                    name = "",
-                                    description = "",
-                                    isPayable = true,
-                                    imgUrl = "",
-                                    order = 0
-                                )
+                Surface(color = MaterialTheme.colors.primaryVariant) {
+                    val selectedInitiative = remember {
+                        mutableStateOf(
+                            Initiative(
+                                name = "",
+                                description = "",
+                                isPayable = true,
+                                imgUrl = "",
+                                order = 0
+                            )
+                        )
+                    }
+                    NavHost(navController = navController, startDestination = RT_SPLASH) {
+                        composable(RT_SPLASH) {
+                            SplashScreen(
+                                modifier = Modifier.fillMaxSize(),
+                                navController = navController
                             )
                         }
-                        NavHost(navController = navController, startDestination = RT_SPLASH) {
-                            composable(RT_SPLASH) {
-                                SplashScreen(
-                                    modifier = Modifier.fillMaxSize(),
-                                    navController = navController
-                                )
-                            }
-                            composable(RT_FEED) {
-                                Feed(
-                                    navController = navController, onHelpClick = { onHelpClick() },
-                                    onChildClicked = {
-                                        selectedInitiative.value = it
+                        composable(RT_FEED) {
+                            Feed(
+                                navController = navController,
+                                onHelpClick = {
                                     },
-                                    initiatives = initiativesDummy.value
-                                )
-                            }
-                            composable(RT_DETAIL) {
-                                InitiativeDetail(
-                                    initiative = selectedInitiative.value,
-                                    onHelpClick = { onHelpClick() })
-                            }
+                                onInitiativeClicked = {
+                                    selectedInitiative.value = it
+                                },
+                                initiatives = initiativesDummy.value
+                            )
                         }
-
+                        composable(RT_DETAIL) {
+                            InitiativeDetail(
+                                initiative = selectedInitiative.value,
+                                onBottomBarItemClicked = {
+                                    onBottomBarClicked(it)
+                                })
+                        }
                     }
-
-
+                }
             }
         }
     }
@@ -139,9 +140,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun onHelpClick() {
-        val currentUser = FirebaseAuthUtils.getUser()
-        PaymentUtils.initiatePayment(this@MainActivity, currentUser)
+    private fun onBottomBarClicked(id: String) {
+        when (id) {
+            AB_HELP -> {
+                val currentUser = FirebaseAuthUtils.getUser()
+                PaymentUtils.initiatePayment(this@MainActivity, currentUser)
+            }
+        }
     }
 
     private fun setStatusBarColor(@ColorRes colorRes: Int, context: Context) {
