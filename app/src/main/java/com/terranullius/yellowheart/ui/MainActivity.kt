@@ -14,7 +14,9 @@ import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +61,7 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val isSignedIn = viewModel.isSignedInFlow.collectAsState()
             val initiativesDummy = viewModel.initiativesFlow.collectAsState()
+            val scaffoldState = rememberScaffoldState()
 
             navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
 
@@ -86,42 +89,45 @@ class MainActivity : ComponentActivity() {
             }
 
             if (isSignedIn.value) YellowHeartTheme {
-                Surface(color = MaterialTheme.colors.primaryVariant) {
-                    val selectedInitiative = remember {
-                        mutableStateOf(
-                            Initiative(
-                                name = "",
-                                description = "",
-                                isPayable = true,
-                                imgUrl = "",
-                                order = 0
-                            )
-                        )
-                    }
-                    NavHost(navController = navController, startDestination = RT_SPLASH) {
-                        composable(RT_SPLASH) {
-                            SplashScreen(
-                                modifier = Modifier.fillMaxSize(),
-                                navController = navController
+
+                    Surface(color = MaterialTheme.colors.primaryVariant) {
+                        val selectedInitiative = remember {
+                            mutableStateOf(
+                                Initiative(
+                                    name = "",
+                                    description = "",
+                                    isPayable = true,
+                                    imgUrl = "",
+                                    order = 0
+                                )
                             )
                         }
-                        composable(RT_FEED) {
-                            Feed(
-                                navController = navController, onHelpClick = { onHelpClick() },
-                                onChildClicked = {
-                                    selectedInitiative.value = it
-                                },
-                                initiatives = initiativesDummy.value
-                            )
+                        NavHost(navController = navController, startDestination = RT_SPLASH) {
+                            composable(RT_SPLASH) {
+                                SplashScreen(
+                                    modifier = Modifier.fillMaxSize(),
+                                    navController = navController
+                                )
+                            }
+                            composable(RT_FEED) {
+                                Feed(
+                                    navController = navController, onHelpClick = { onHelpClick() },
+                                    onChildClicked = {
+                                        selectedInitiative.value = it
+                                    },
+                                    initiatives = initiativesDummy.value
+                                )
+                            }
+                            composable(RT_DETAIL) {
+                                InitiativeDetail(
+                                    initiative = selectedInitiative.value,
+                                    onHelpClick = { onHelpClick() })
+                            }
                         }
-                        composable(RT_DETAIL) {
-                            InitiativeDetail(
-                                initiative = selectedInitiative.value,
-                                onHelpClick = { onHelpClick() })
-                        }
+
                     }
 
-                }
+
             }
         }
     }

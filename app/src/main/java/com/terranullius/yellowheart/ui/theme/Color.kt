@@ -3,7 +3,7 @@ package com.terranullius.yellowheart.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryColor= Color(0xffffd600)
-val primaryLightColor= Color(0xFFD8B332)
+val primaryLightColor= Color(0xFFe9bf34)
 val primaryDarkColor= Color(0xffc7a500)
 val secondaryColor= Color(0xff304ffe)
 val secondaryLightColor= Color(0xFF3A72FF)
