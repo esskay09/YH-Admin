@@ -24,7 +24,10 @@ fun InitiativeDetail(
     modifier: Modifier = Modifier,
     onHelpClick: () -> Unit
 ) {
-    val currentColor = remember{mutableStateOf(0xffe9bf34)}
+
+    val scaffoldState = rememberScaffoldState()
+
+    val currentColor = remember { mutableStateOf(0xffe9bf34) }
     val bgColor = Color(currentColor.value)
 
     val animatedColor = animateColorAsState(targetValue = bgColor)
@@ -35,7 +38,7 @@ fun InitiativeDetail(
             0xffeac338
         )
     }
-    Scaffold(modifier = modifier) {
+    Scaffold(modifier = modifier, scaffoldState = scaffoldState) {
         Surface(color = animatedColor.value) {
             Box(
                 modifier = Modifier
@@ -74,10 +77,13 @@ fun InitiativeDetail(
                             color = Color.Black
                         )
                     )
-                    Text(text = currentColor.value.toString(), modifier = Modifier.align(Alignment.End))
+                    Text(
+                        text = currentColor.value.toString(),
+                        modifier = Modifier.align(Alignment.End)
+                    )
                 }
 
-                HelpButton(
+                if (false) HelpButton(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .fillMaxWidth()
@@ -90,6 +96,10 @@ fun InitiativeDetail(
                         it != currentColor.value
                     }!!
                 }
+
+                BottomBar(
+                    modifier = Modifier.align(Alignment.BottomStart)
+                )
             }
         }
     }
