@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
                 if (window != null) {
                     when (navDestination.route) {
                         RT_SPLASH -> setStatusBarColor(R.color.secondaryLightColor, context)
-                        else -> setStatusBarColor(R.color.primaryLightColor, context)
+                        else -> setStatusBarColor(R.color.primaryColor, context)
                     }
                 }
             }

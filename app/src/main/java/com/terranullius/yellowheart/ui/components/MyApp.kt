@@ -24,7 +24,7 @@ fun MyApp(
     initiatives: State<Result<List<Initiative>>>,
     onBottomBarClicked: (String) -> Unit
 ) {
-        Surface(color = MaterialTheme.colors.primaryVariant) {
+        Surface(color = MaterialTheme.colors.primary) {
 
         val selectedInitiative = remember {
             mutableStateOf(

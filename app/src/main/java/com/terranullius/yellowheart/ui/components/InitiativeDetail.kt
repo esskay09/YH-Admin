@@ -1,22 +1,25 @@
 package com.terranullius.yellowheart.ui.components
 
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheart.data.Initiative
 
+@ExperimentalPagerApi
 @Composable
 fun InitiativeDetail(
     initiative: Initiative,
@@ -24,26 +27,33 @@ fun InitiativeDetail(
     onBottomBarItemClicked: (String) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
+    val scrollstate = rememberScrollState()
 
-    val currentColor = remember { mutableStateOf(0xffe9bf34) }
-    val bgColor = Color(currentColor.value)
+    Scaffold(modifier = modifier, scaffoldState = scaffoldState,
+        bottomBar = {
+            BottomBar(
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(15.dp)
+                    ),
+                onBottomBarItemClicked = {
+                    onBottomBarItemClicked(it)
+                }
+            )
+        }) {
 
-    val animatedColor = animateColorAsState(targetValue = bgColor)
+        Surface(color = MaterialTheme.colors.primary) {
 
-    val colorList = remember {
-        listOf(
-            0xffe9bf34,
-            0xffeac338
-        )
-    }
-    Scaffold(modifier = modifier, scaffoldState = scaffoldState) {
-        Surface(color = animatedColor.value) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(8.dp)
             ) {
-                Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.Start) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollstate), horizontalAlignment = Alignment.Start
+                ) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -51,11 +61,9 @@ fun InitiativeDetail(
                         shape = RoundedCornerShape(15.dp),
                         elevation = 5.dp
                     ) {
-                        Image(
+                        ViewPagerImages(
                             modifier = Modifier.fillMaxSize(),
-                            painter = rememberCoilPainter(initiative.images[0]),
-                            contentScale = ContentScale.Crop,
-                            contentDescription = ""
+                            images = initiative.images
                         )
                     }
                     Spacer(Modifier.height(8.dp))
@@ -75,19 +83,12 @@ fun InitiativeDetail(
                             color = Color.Black
                         )
                     )
-                    Text(
-                        text = currentColor.value.toString(),
-                        modifier = Modifier.align(Alignment.End)
-                    )
+
                 }
 
-                BottomBar(
-                    modifier = Modifier.align(Alignment.BottomStart),
-                    onBottomBarItemClicked = {
-                        onBottomBarItemClicked(it)
-                    }
-                )
+
             }
+
         }
     }
 }
