@@ -7,6 +7,9 @@ import com.terranullius.yellowheart.other.Constants.FB_FIELD_IMG_URL
 import com.terranullius.yellowheart.other.Constants.FB_FIELD_IS_PAYABLE
 import com.terranullius.yellowheart.other.Constants.FB_FIELD_NAME
 import com.terranullius.yellowheart.other.Constants.FB_FIELD_ORDER
+import com.terranullius.yellowheart.other.Constants.FB_FIELD_SHARE_FB
+import com.terranullius.yellowheart.other.Constants.FB_FIELD_SHARE_INSTA
+import com.terranullius.yellowheart.other.Constants.FB_FIELD_SHARE_TWITTER
 import java.util.*
 
 data class InitiativeDto(
@@ -16,7 +19,10 @@ data class InitiativeDto(
     @field:JvmField
     val isPayable: Boolean = true,
     val images: List<String>,
-    val order: Long?
+    val order: Long?,
+    val shareLinkFb: String,
+    val shareLinkInsta: String,
+    val shareLinkTwitter: String
 )
 
 fun InitiativeDto.toInitiative(): Initiative = Initiative(
@@ -25,7 +31,10 @@ fun InitiativeDto.toInitiative(): Initiative = Initiative(
     description = this.description,
     isPayable = this.isPayable,
     images = this.images,
-    order = this.order
+    order = this.order,
+    shareLinkFb = this.shareLinkFb,
+    shareLinkInsta = this.shareLinkInsta,
+    shareLinkTwitter = this.shareLinkTwitter
 )
 
 fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
@@ -37,6 +46,9 @@ fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
             images = this.get(FB_FIELD_IMAGES) as List<String>,
             isPayable = this.getBoolean(FB_FIELD_IS_PAYABLE)!!,
             order = this.getLong(FB_FIELD_ORDER),
+            shareLinkFb = this.getString(FB_FIELD_SHARE_FB)!!,
+            shareLinkInsta = this.getString(FB_FIELD_SHARE_INSTA)!!,
+            shareLinkTwitter = this.getString(FB_FIELD_SHARE_TWITTER)!!
         )
     } catch (e: Exception) {
         return null

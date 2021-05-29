@@ -27,7 +27,6 @@ fun InitiativeDetail(
     onBottomBarItemClicked: (String) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
-    val scrollstate = rememberScrollState()
 
     Scaffold(modifier = modifier, scaffoldState = scaffoldState,
         bottomBar = {
@@ -51,22 +50,22 @@ fun InitiativeDetail(
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollstate), horizontalAlignment = Alignment.Start
+                        .fillMaxSize(),
+                    horizontalAlignment = Alignment.Start
                 ) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(270.dp),
                         shape = RoundedCornerShape(15.dp),
-                        elevation = 5.dp
+                        elevation = 12.dp
                     ) {
                         ViewPagerImages(
                             modifier = Modifier.fillMaxSize(),
                             images = initiative.images
                         )
                     }
-                    Spacer(Modifier.height(8.dp))
+                    Spacer(Modifier.height(12.dp))
                     Text(
                         text = initiative.name,
                         style = MaterialTheme.typography.h4.copy(
@@ -74,7 +73,7 @@ fun InitiativeDetail(
                             color = Color.Black
                         )
                     )
-                    Spacer(Modifier.height(48.dp))
+                    Spacer(Modifier.height(14.dp))
                     Text(
                         text = initiative.description,
 
@@ -85,8 +84,6 @@ fun InitiativeDetail(
                     )
 
                 }
-
-
             }
 
         }

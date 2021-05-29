@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.terranullius.yellowheart.other.Constants.AB_HELP
 import com.terranullius.yellowheart.other.Constants.AB_JOIN
 import com.terranullius.yellowheart.other.Constants.AB_SHARE
@@ -21,7 +22,7 @@ fun BottomBar(
     colorBg: Color = MaterialTheme.colors.secondary,
     onBottomBarItemClicked: (id: String) -> Unit
 ) {
-    BottomAppBar(modifier = modifier, backgroundColor = colorBg) {
+    BottomAppBar(modifier = modifier, backgroundColor = colorBg, elevation = 20.dp) {
         BottomNavigation(modifier = Modifier.fillMaxWidth(), backgroundColor = colorBg) {
             BottomNavigationItem(
                 icon = {
