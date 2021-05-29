@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,7 +21,7 @@ import com.terranullius.yellowheart.utils.Result
 fun MyApp(
     isSignedIn: Boolean,
     navController: NavHostController,
-    initiatives: Result<List<Initiative>>,
+    initiatives: State<Result<List<Initiative>>>,
     onBottomBarClicked: (String) -> Unit
 ) {
         Surface(color = MaterialTheme.colors.primaryVariant) {
@@ -53,7 +54,7 @@ fun MyApp(
                         onInitiativeClicked = {
                             selectedInitiative.value = it
                         },
-                        initiatives = initiatives
+                        initiatives = initiatives.value
                     )
                 }
                 composable(Constants.RT_DETAIL) {

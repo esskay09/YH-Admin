@@ -98,7 +98,7 @@ class MainActivity : ComponentActivity() {
             }
 
             YellowHeartTheme {
-                MyApp(isSignedIn = isSignedIn.value, navController = navController, initiatives = initiatives.value,
+                MyApp(isSignedIn = isSignedIn.value, navController = navController, initiatives = initiatives,
                 onBottomBarClicked = {
                     onBottomBarClicked(it) })
             }
