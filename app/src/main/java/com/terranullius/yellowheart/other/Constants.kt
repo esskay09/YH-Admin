@@ -12,10 +12,14 @@ object Constants {
     const val FB_FIELD_IS_PAYABLE = "isPayable"
     const val FB_FIELD_ORDER = "order"
     const val FB_FIELD_IMAGES = "images"
+
     const val FB_FIELD_SHARE_FB = "share_fb"
     const val FB_FIELD_SHARE_INSTA = "share_insta"
     const val FB_FIELD_SHARE_TWITTER = "share_twitter"
 
+    const val DIALOG_FB = "share_fb"
+    const val DIALOG_INSTA = "share_insta"
+    const val DIALOG_TWITTER = "share_twitter"
     const val AB_SHARE = "share"
     const val AB_JOIN = "join"
     const val AB_HELP = "help"

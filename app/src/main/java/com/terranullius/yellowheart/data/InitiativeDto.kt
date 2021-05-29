@@ -20,9 +20,7 @@ data class InitiativeDto(
     val isPayable: Boolean = true,
     val images: List<String>,
     val order: Long?,
-    val shareLinkFb: String,
-    val shareLinkInsta: String,
-    val shareLinkTwitter: String
+    val shareLinks: ShareLinks,
 )
 
 fun InitiativeDto.toInitiative(): Initiative = Initiative(
@@ -32,12 +30,17 @@ fun InitiativeDto.toInitiative(): Initiative = Initiative(
     isPayable = this.isPayable,
     images = this.images,
     order = this.order,
-    shareLinkFb = this.shareLinkFb,
-    shareLinkInsta = this.shareLinkInsta,
-    shareLinkTwitter = this.shareLinkTwitter
+    shareLinks = this.shareLinks
 )
 
 fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
+
+    val shareLinks = ShareLinks(
+        fb = this.getString(FB_FIELD_SHARE_FB)!!,
+        insta = this.getString(FB_FIELD_SHARE_INSTA)!!,
+        twitter = this.getString(FB_FIELD_SHARE_TWITTER)!!
+    )
+
     return try {
         InitiativeDto(
             id = this.id,
@@ -46,9 +49,7 @@ fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
             images = this.get(FB_FIELD_IMAGES) as List<String>,
             isPayable = this.getBoolean(FB_FIELD_IS_PAYABLE)!!,
             order = this.getLong(FB_FIELD_ORDER),
-            shareLinkFb = this.getString(FB_FIELD_SHARE_FB)!!,
-            shareLinkInsta = this.getString(FB_FIELD_SHARE_INSTA)!!,
-            shareLinkTwitter = this.getString(FB_FIELD_SHARE_TWITTER)!!
+            shareLinks = shareLinks
         )
     } catch (e: Exception) {
         return null

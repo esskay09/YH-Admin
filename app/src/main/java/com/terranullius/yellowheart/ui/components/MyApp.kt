@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheart.data.Initiative
+import com.terranullius.yellowheart.data.ShareLinks
 import com.terranullius.yellowheart.other.Constants
 import com.terranullius.yellowheart.utils.Result
 
@@ -22,7 +23,8 @@ fun MyApp(
     isSignedIn: Boolean,
     navController: NavHostController,
     initiatives: State<Result<List<Initiative>>>,
-    onBottomBarClicked: (String) -> Unit
+    onBottomBarClicked: (String) -> Unit,
+    onShareDialogClicked: (link: String) -> Unit,
 ) {
         Surface(color = MaterialTheme.colors.primary) {
 
@@ -33,7 +35,8 @@ fun MyApp(
                     description = "",
                     isPayable = true,
                     images = emptyList(),
-                    order = 0
+                    order = 0,
+                    shareLinks = ShareLinks("","","")
                 )
             )
         }
@@ -62,7 +65,8 @@ fun MyApp(
                         initiative = selectedInitiative.value,
                         onBottomBarItemClicked = {
                             onBottomBarClicked(it)
-                        })
+                        },
+                    onShareDialogClicked = onShareDialogClicked)
                 }
             }
         }

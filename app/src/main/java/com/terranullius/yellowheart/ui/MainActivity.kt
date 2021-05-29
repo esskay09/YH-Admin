@@ -45,6 +45,8 @@ import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheart.R
 
 
+//TODO REFRACTOR LENGTHY CALLBACKS INTO VIEWMODEL
+
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
@@ -62,13 +64,6 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val isSignedIn = viewModel.isSignedInFlow.collectAsState()
             val initiatives = viewModel.initiativesFlow.collectAsState()
-
-            SideEffect {
-             GlobalScope.launch {
-                 delay(5000L)
-                 Log.d("shit", initiatives.value.toString())
-             }
-            }
 
             val scaffoldState = rememberScaffoldState()
 
@@ -98,9 +93,15 @@ class MainActivity : ComponentActivity() {
             }
 
             YellowHeartTheme {
-                MyApp(isSignedIn = isSignedIn.value, navController = navController, initiatives = initiatives,
-                onBottomBarClicked = {
-                    onBottomBarClicked(it) })
+                MyApp(isSignedIn = isSignedIn.value,
+                    navController = navController,
+                    initiatives = initiatives,
+                    onBottomBarClicked = {
+                        onBottomBarClicked(it)
+                    },
+                    onShareDialogClicked = { link ->
+                        onShareDialogClicked(link)
+                    })
             }
         }
     }
@@ -119,10 +120,6 @@ class MainActivity : ComponentActivity() {
                 PaymentUtils.initiatePayment(this@MainActivity, currentUser)
             }
             AB_SHARE -> {
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("https://www.instagram.com/p/CPYAiboD8fb/")
-                }
-                startActivity(intent)
             }
             AB_JOIN -> {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -131,6 +128,13 @@ class MainActivity : ComponentActivity() {
                 startActivity(intent)
             }
         }
+    }
+
+    private fun onShareDialogClicked(link: String) {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            data = Uri.parse(link)
+        }
+        startActivity(intent)
     }
 
     private fun setStatusBarColor(@ColorRes colorRes: Int, context: Context) {
