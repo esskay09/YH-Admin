@@ -53,7 +53,7 @@ fun InitiativeDetail(
                     ) {
                         Image(
                             modifier = Modifier.fillMaxSize(),
-                            painter = rememberCoilPainter(initiative.imgUrl),
+                            painter = rememberCoilPainter(initiative.images[0]),
                             contentScale = ContentScale.Crop,
                             contentDescription = ""
                         )

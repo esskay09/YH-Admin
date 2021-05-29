@@ -1,6 +1,5 @@
 package com.terranullius.yellowheart.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,13 +11,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheart.data.Initiative
 
+@ExperimentalPagerApi
 @Composable
 fun FeedImageCard(
     initiative: Initiative,
@@ -32,12 +30,9 @@ fun FeedImageCard(
         elevation = 5.dp
     ) {
         Box(modifier = Modifier.height(270.dp)) {
-            Image(
+            ViewPagerImages(
                 modifier = Modifier.fillMaxSize(),
-                painter = rememberCoilPainter(request = initiative.imgUrl),
-                contentDescription = initiative.description,
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.Center
+                images = initiative.images
             )
             Box(
                 modifier = Modifier

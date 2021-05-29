@@ -15,38 +15,31 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
-import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
 import com.terranullius.yellowheart.other.Constants.AB_HELP
 import com.terranullius.yellowheart.other.Constants.AB_JOIN
 import com.terranullius.yellowheart.other.Constants.AB_SHARE
 import com.terranullius.yellowheart.other.Constants.JOIN_LINK
-import com.terranullius.yellowheart.other.Constants.RT_DETAIL
-import com.terranullius.yellowheart.other.Constants.RT_FEED
 import com.terranullius.yellowheart.other.Constants.RT_SPLASH
 import com.terranullius.yellowheart.payment.PaymentUtils
 import com.terranullius.yellowheart.ui.components.*
 import com.terranullius.yellowheart.ui.theme.YellowHeartTheme
 import com.terranullius.yellowheart.viewmodels.MainViewModel
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheart.R
@@ -68,7 +61,15 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val context = LocalContext.current
             val isSignedIn = viewModel.isSignedInFlow.collectAsState()
-            val initiativesFlow = viewModel.initiativesFlow.collectAsState()
+            val initiatives = viewModel.initiativesFlow.collectAsState()
+
+            SideEffect {
+             GlobalScope.launch {
+                 delay(5000L)
+                 Log.d("shit", initiatives.value.toString())
+             }
+            }
+
             val scaffoldState = rememberScaffoldState()
 
             navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
@@ -96,49 +97,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            if (isSignedIn.value) YellowHeartTheme {
-
-                ViewPagerImages(modifier = Modifier.fillMaxWidth().height(200.dp))
-
-                /*Surface(color = MaterialTheme.colors.primaryVariant) {
-                    val selectedInitiative = remember {
-                        mutableStateOf(
-                            Initiative(
-                                name = "",
-                                description = "",
-                                isPayable = true,
-                                imgUrl = "",
-                                order = 0
-                            )
-                        )
-                    }
-                    NavHost(navController = navController, startDestination = RT_SPLASH) {
-                        composable(RT_SPLASH) {
-                            SplashScreen(
-                                modifier = Modifier.fillMaxSize(),
-                                navController = navController
-                            )
-                        }
-                        composable(RT_FEED) {
-                            Feed(
-                                navController = navController,
-                                onHelpClick = {
-                                },
-                                onInitiativeClicked = {
-                                    selectedInitiative.value = it
-                                },
-                                initiatives = initiativesFlow.value
-                            )
-                        }
-                        composable(RT_DETAIL) {
-                            InitiativeDetail(
-                                initiative = selectedInitiative.value,
-                                onBottomBarItemClicked = {
-                                    onBottomBarClicked(it)
-                                })
-                        }
-                    }
-                }*/
+            YellowHeartTheme {
+                MyApp(isSignedIn = isSignedIn.value, navController = navController, initiatives = initiatives.value,
+                onBottomBarClicked = {
+                    onBottomBarClicked(it) })
             }
         }
     }

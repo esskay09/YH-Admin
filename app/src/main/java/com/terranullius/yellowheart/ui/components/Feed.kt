@@ -11,10 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 import com.terranullius.yellowheart.utils.Result
 
+@ExperimentalPagerApi
 @Composable
 fun Feed(
     navController: NavController,
@@ -40,6 +42,6 @@ fun Feed(
             }
         }
         is Result.Error -> TODO()
-        Result.Loading -> CircularProgress(modifier = Modifier.fillMaxSize())
+        is Result.Loading -> CircularProgress(modifier = Modifier.fillMaxSize())
     }
 }
