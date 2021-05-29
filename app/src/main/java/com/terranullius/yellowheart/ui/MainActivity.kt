@@ -2,6 +2,8 @@ package com.terranullius.yellowheart.ui
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -22,17 +24,22 @@ import androidx.compose.runtime.remember
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
 import com.terranullius.yellowheart.other.Constants.AB_HELP
+import com.terranullius.yellowheart.other.Constants.AB_JOIN
+import com.terranullius.yellowheart.other.Constants.AB_SHARE
+import com.terranullius.yellowheart.other.Constants.JOIN_LINK
 import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 import com.terranullius.yellowheart.other.Constants.RT_FEED
 import com.terranullius.yellowheart.other.Constants.RT_SPLASH
@@ -48,6 +55,7 @@ import terranullius.yellowheart.R
 class MainActivity : ComponentActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
+    @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,7 +68,7 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             val context = LocalContext.current
             val isSignedIn = viewModel.isSignedInFlow.collectAsState()
-            val initiativesDummy = viewModel.initiativesFlow.collectAsState()
+            val initiativesFlow = viewModel.initiativesFlow.collectAsState()
             val scaffoldState = rememberScaffoldState()
 
             navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
@@ -90,7 +98,9 @@ class MainActivity : ComponentActivity() {
 
             if (isSignedIn.value) YellowHeartTheme {
 
-                Surface(color = MaterialTheme.colors.primaryVariant) {
+                ViewPagerImages(modifier = Modifier.fillMaxWidth().height(200.dp))
+
+                /*Surface(color = MaterialTheme.colors.primaryVariant) {
                     val selectedInitiative = remember {
                         mutableStateOf(
                             Initiative(
@@ -113,11 +123,11 @@ class MainActivity : ComponentActivity() {
                             Feed(
                                 navController = navController,
                                 onHelpClick = {
-                                    },
+                                },
                                 onInitiativeClicked = {
                                     selectedInitiative.value = it
                                 },
-                                initiatives = initiativesDummy.value
+                                initiatives = initiativesFlow.value
                             )
                         }
                         composable(RT_DETAIL) {
@@ -128,7 +138,7 @@ class MainActivity : ComponentActivity() {
                                 })
                         }
                     }
-                }
+                }*/
             }
         }
     }
@@ -145,6 +155,18 @@ class MainActivity : ComponentActivity() {
             AB_HELP -> {
                 val currentUser = FirebaseAuthUtils.getUser()
                 PaymentUtils.initiatePayment(this@MainActivity, currentUser)
+            }
+            AB_SHARE -> {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://www.instagram.com/p/CPYAiboD8fb/")
+                }
+                startActivity(intent)
+            }
+            AB_JOIN -> {
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse(JOIN_LINK)
+                }
+                startActivity(intent)
             }
         }
     }

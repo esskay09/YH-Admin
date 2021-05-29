@@ -86,4 +86,10 @@ dependencies {
 
     //Coil Image
     implementation "com.google.accompanist:accompanist-coil:0.10.0"
+
+    //Horizontal Pagers
+    implementation "com.google.accompanist:accompanist-pager:0.10.0"
+
+    //Glide
+    implementation "com.google.accompanist:accompanist-glide:0.10.0"
 }

@@ -12,7 +12,9 @@ object Constants {
     const val FB_FIELD_IS_PAYABLE = "isPayable"
     const val FB_FIELD_ORDER = "order"
 
-    const val AB_SHARE ="share"
+    const val AB_SHARE = "share"
     const val AB_JOIN = "join"
     const val AB_HELP = "help"
+
+    const val JOIN_LINK = "https://chat.whatsapp.com/FZIY9JlyvPP8vJ5YzBaY8s"
 }

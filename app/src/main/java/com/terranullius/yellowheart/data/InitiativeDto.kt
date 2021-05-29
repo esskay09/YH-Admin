@@ -35,7 +35,7 @@ fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
             description = this.getString(FB_FIELD_DESCRIPTION)!!,
             imgUrl = this.getString(FB_FIELD_IMG_URL)!!,
             isPayable = this.getBoolean(FB_FIELD_IS_PAYABLE)!!,
-            order = this.getLong(FB_FIELD_ORDER)
+            order = this.getLong(FB_FIELD_ORDER),
         )
     } catch (e: Exception) {
         return null

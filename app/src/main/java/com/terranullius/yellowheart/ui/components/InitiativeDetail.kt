@@ -23,7 +23,6 @@ fun InitiativeDetail(
     modifier: Modifier = Modifier,
     onBottomBarItemClicked: (String) -> Unit
 ) {
-
     val scaffoldState = rememberScaffoldState()
 
     val currentColor = remember { mutableStateOf(0xffe9bf34) }
