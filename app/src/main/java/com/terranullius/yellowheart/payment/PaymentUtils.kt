@@ -34,13 +34,13 @@ object PaymentUtils {
         )
     }
 
-    fun initiatePayment(context: Activity, user: User) {
-        createPaykunObject(user)
+    fun initiatePayment(context: Activity, user: User, amount: Int) {
+        createPaykunObject(user, amount)
         PaykunApiCall.Builder(context).sendJsonObject(jsonObject)
     }
 
     //TODO ADD PARAMS & SECURE ACCESS TOKEN
-    private fun createPaykunObject(user: User) {
+    private fun createPaykunObject(user: User, amount: Int) {
         jsonObject = JSONObject()
         try {
             jsonObject.put("merchant_id", "005181070659984")
@@ -53,7 +53,7 @@ object PaymentUtils {
                 "order_no",
                 System.currentTimeMillis()
             ) // order no. should have 10 to 30 character in numeric format
-            jsonObject.put("amount", "10") // minimum amount should be 10
+            jsonObject.put("amount", amount.toString()) // minimum amount should be 10
             jsonObject.put("isLive", false) // need to send false if you are in sandbox mode
         } catch (e: JSONException) {
             e.printStackTrace()

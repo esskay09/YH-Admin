@@ -64,6 +64,8 @@ fun InitiativeDetail(
         }) {
             HelpDialog(
                 modifier = Modifier,
+                //TODO ADD LINK.DESCRIPTION
+
                 description = "Help bla bla bla bla bla bla bla...description", isDonatable = true,
                 onHelpClicked = {
                     onHelpClicked(

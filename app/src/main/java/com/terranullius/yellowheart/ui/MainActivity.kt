@@ -96,11 +96,7 @@ class MainActivity : ComponentActivity() {
             }
 
             YellowHeartTheme {
-
-
-
-
-               /* MyApp(isSignedIn = isSignedIn.value,
+                MyApp(isSignedIn = isSignedIn.value,
                     navController = navController,
                     initiatives = initiatives,
                     onBottomBarClicked = {
@@ -108,7 +104,10 @@ class MainActivity : ComponentActivity() {
                     },
                     onShareDialogClicked = { link ->
                         onShareDialogClicked(link)
-                    })*/
+                    },
+                    onHelpClicked = {isPayable: Boolean, link: String?, amount: Int? ->
+                        onHelpDialogCLicked(isPayable, link, amount)
+                    })
             }
         }
     }
@@ -123,8 +122,6 @@ class MainActivity : ComponentActivity() {
     private fun onBottomBarClicked(id: String) {
         when (id) {
             AB_HELP -> {
-                val currentUser = FirebaseAuthUtils.getUser()
-                PaymentUtils.initiatePayment(this@MainActivity, currentUser)
             }
             AB_SHARE -> {
             }
@@ -135,6 +132,23 @@ class MainActivity : ComponentActivity() {
                 startActivity(intent)
             }
         }
+    }
+
+    private fun onHelpDialogCLicked(isPayable: Boolean, link: String?, amount: Int?) {
+        if (isPayable){
+            try{ initiatePayment(amount!!) } catch (e: Exception){Log.d("shit", e.message!!)}
+        }
+        else{
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                try{ data = Uri.parse(link!!) } catch (e: Exception){Log.d("shit", e.message!!)}
+            }
+            startActivity(intent)
+        }
+    }
+
+    private fun initiatePayment(amount: Int){
+        val currentUser = FirebaseAuthUtils.getUser()
+        PaymentUtils.initiatePayment(this@MainActivity, currentUser, amount)
     }
 
     private fun onShareDialogClicked(link: String) {

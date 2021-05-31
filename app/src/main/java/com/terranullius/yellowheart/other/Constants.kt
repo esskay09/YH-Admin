@@ -17,6 +17,9 @@ object Constants {
     const val FB_FIELD_SHARE_INSTA = "share_insta"
     const val FB_FIELD_SHARE_TWITTER = "share_twitter"
 
+    const val FB_FIELD_HELP_DESCRIPTION = "help_description"
+    const val FB_FIELD_HELP_LINK =  "help_link"
+
     const val DIALOG_FB = "share_fb"
     const val DIALOG_INSTA = "share_insta"
     const val DIALOG_TWITTER = "share_twitter"

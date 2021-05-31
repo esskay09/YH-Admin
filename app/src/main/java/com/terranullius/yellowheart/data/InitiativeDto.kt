@@ -2,6 +2,8 @@ package com.terranullius.yellowheart.data
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.terranullius.yellowheart.other.Constants.FB_FIELD_DESCRIPTION
+import com.terranullius.yellowheart.other.Constants.FB_FIELD_HELP_DESCRIPTION
+import com.terranullius.yellowheart.other.Constants.FB_FIELD_HELP_LINK
 import com.terranullius.yellowheart.other.Constants.FB_FIELD_IMAGES
 import com.terranullius.yellowheart.other.Constants.FB_FIELD_IMG_URL
 import com.terranullius.yellowheart.other.Constants.FB_FIELD_IS_PAYABLE
@@ -21,6 +23,8 @@ data class InitiativeDto(
     val images: List<String>,
     val order: Long?,
     val shareLinks: ShareLinks,
+    val helpLink: String? = null,
+    val helpDescription: String? = null
 )
 
 fun InitiativeDto.toInitiative(): Initiative = Initiative(
@@ -30,7 +34,9 @@ fun InitiativeDto.toInitiative(): Initiative = Initiative(
     isPayable = this.isPayable,
     images = this.images,
     order = this.order,
-    shareLinks = this.shareLinks
+    shareLinks = this.shareLinks,
+    helpLink = this.helpLink,
+    helpDescription = this.helpDescription
 )
 
 fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
@@ -49,7 +55,9 @@ fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
             images = this.get(FB_FIELD_IMAGES) as List<String>,
             isPayable = this.getBoolean(FB_FIELD_IS_PAYABLE)!!,
             order = this.getLong(FB_FIELD_ORDER),
-            shareLinks = shareLinks
+            shareLinks = shareLinks,
+            helpDescription = this.getString(FB_FIELD_HELP_DESCRIPTION)!!,
+            helpLink = this.getString(FB_FIELD_HELP_LINK)!!
         )
     } catch (e: Exception) {
         return null

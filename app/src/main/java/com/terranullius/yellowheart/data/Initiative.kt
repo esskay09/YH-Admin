@@ -8,5 +8,7 @@ data class Initiative(
     val isPayable: Boolean = true,
     val order: Long?,
     val shareLinks: ShareLinks,
-    val initialPage: Int = 0
+    val initialPage: Int = 0,
+    val helpLink: String? = null,
+    val helpDescription: String? = null
 )
