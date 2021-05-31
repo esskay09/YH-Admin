@@ -21,6 +21,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.other.Constants
 import com.terranullius.yellowheart.other.Constants.AB_SHARE
@@ -37,22 +38,28 @@ fun InitiativeDetail(
     onShareDialogClicked: (link: String) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
-    val isShareClicked = remember{
+    val isShareClicked = remember {
         mutableStateOf(false)
     }
+    val pagerState = rememberPagerState(
+        initialPage = initiative.initialPage,
+        pageCount = initiative.images.size,
+        initialOffscreenLimit = 2
+    )
 
-    if (isShareClicked.value){
+    if (isShareClicked.value) {
         Dialog(onDismissRequest = {
             isShareClicked.value = false
         }) {
             ShareDialog(modifier = Modifier.fillMaxWidth(), onShareClicked = {
-                when(it){
-                   Constants.DIALOG_INSTA -> onShareDialogClicked(initiative.shareLinks.insta)
-                    Constants.DIALOG_FB -> onShareDialogClicked(initiative.shareLinks.fb)
-                    Constants.DIALOG_TWITTER -> onShareDialogClicked(initiative.shareLinks.twitter)
+                when (it) {
+                    DIALOG_INSTA -> onShareDialogClicked(initiative.shareLinks.insta)
+                    DIALOG_FB -> onShareDialogClicked(initiative.shareLinks.fb)
+                    DIALOG_TWITTER -> onShareDialogClicked(initiative.shareLinks.twitter)
                 }
-            }) }
+            })
         }
+    }
 
     Scaffold(modifier = modifier, scaffoldState = scaffoldState,
         bottomBar = {
@@ -62,7 +69,7 @@ fun InitiativeDetail(
                         RoundedCornerShape(15.dp)
                     ),
                 onBottomBarItemClicked = {
-                    if (it == AB_SHARE){
+                    if (it == AB_SHARE) {
                         isShareClicked.value = true
                     }
                     onBottomBarItemClicked(it)
@@ -91,7 +98,8 @@ fun InitiativeDetail(
                     ) {
                         ViewPagerImages(
                             modifier = Modifier.fillMaxSize(),
-                            images = initiative.images
+                            images = initiative.images,
+                            pagerState = pagerState
                         )
                     }
                     Spacer(Modifier.height(12.dp))

@@ -20,7 +20,6 @@ import com.terranullius.yellowheart.utils.Result
 @Composable
 fun Feed(
     navController: NavController,
-    onHelpClick: () -> Unit,
     onInitiativeClicked: (initiative: Initiative) -> Unit,
     initiatives: Result<List<Initiative>>
 ) {
@@ -37,7 +36,9 @@ fun Feed(
                         onInitiativeClicked(initiative)
                         navController.navigate(RT_DETAIL)
                     },
-                    onHelpClick = onHelpClick
+                    onInitiativeClicked = {
+                        onInitiativeClicked(it)
+                    }
                 )
             }
         }

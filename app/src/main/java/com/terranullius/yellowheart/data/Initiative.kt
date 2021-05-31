@@ -7,5 +7,6 @@ data class Initiative(
     var images: List<String>,
     val isPayable: Boolean = true,
     val order: Long?,
-    val shareLinks: ShareLinks
+    val shareLinks: ShareLinks,
+    val initialPage: Int = 0
 )

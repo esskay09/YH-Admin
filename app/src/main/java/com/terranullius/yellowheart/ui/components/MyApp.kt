@@ -15,6 +15,9 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.data.ShareLinks
 import com.terranullius.yellowheart.other.Constants
+import com.terranullius.yellowheart.other.Constants.RT_DETAIL
+import com.terranullius.yellowheart.other.Constants.RT_FEED
+import com.terranullius.yellowheart.other.Constants.RT_SPLASH
 import com.terranullius.yellowheart.utils.Result
 
 @ExperimentalPagerApi
@@ -42,25 +45,24 @@ fun MyApp(
         }
 
         if (isSignedIn){
-            NavHost(navController = navController, startDestination = Constants.RT_SPLASH) {
-                composable(Constants.RT_SPLASH) {
+            NavHost(navController = navController, startDestination = RT_SPLASH) {
+                composable(RT_SPLASH) {
                     SplashScreen(
                         modifier = Modifier.fillMaxSize(),
                         navController = navController
                     )
                 }
-                composable(Constants.RT_FEED) {
+                composable(RT_FEED) {
                     Feed(
                         navController = navController,
-                        onHelpClick = {
-                        },
                         onInitiativeClicked = {
                             selectedInitiative.value = it
+                            navController.navigate(RT_DETAIL)
                         },
                         initiatives = initiatives.value
                     )
                 }
-                composable(Constants.RT_DETAIL) {
+                composable(RT_DETAIL) {
                     InitiativeDetail(
                         initiative = selectedInitiative.value,
                         onBottomBarItemClicked = {

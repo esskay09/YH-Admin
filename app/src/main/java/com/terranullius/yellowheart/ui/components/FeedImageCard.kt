@@ -1,6 +1,7 @@
 package com.terranullius.yellowheart.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -14,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.rememberPagerState
 import com.terranullius.yellowheart.data.Initiative
 
 @ExperimentalPagerApi
@@ -21,16 +23,22 @@ import com.terranullius.yellowheart.data.Initiative
 fun FeedImageCard(
     initiative: Initiative,
     modifier: Modifier = Modifier,
-    onHelpClick: () -> Unit
+    onInitiativeClicked: (initiative: Initiative) -> Unit
 ) {
+    val pagerState = rememberPagerState(pageCount = initiative.images.size, initialOffscreenLimit = 2)
+
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable {
+                onInitiativeClicked(initiative.copy(initialPage = pagerState.currentPage))
+            },
         shape = RoundedCornerShape(15.dp),
         elevation = 5.dp
     ) {
         Box(modifier = Modifier.height(270.dp)) {
             ViewPagerImages(
+                pagerState = pagerState,
                 modifier = Modifier.fillMaxSize(),
                 images = initiative.images
             )
@@ -60,7 +68,7 @@ fun FeedImageCard(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(8.dp),
-                onClick = onHelpClick
+                onClick = { }
             )
         }
     }

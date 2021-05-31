@@ -14,19 +14,14 @@ import com.bumptech.glide.RequestBuilder
 import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.glide.rememberGlidePainter
 import com.google.accompanist.imageloading.LoadPainter
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.calculateCurrentOffsetForPage
-import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.pager.*
 import kotlin.math.absoluteValue
 
 @ExperimentalPagerApi
 @Composable
-fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>) {
+fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>, pagerState: PagerState) {
 
-    val pagesState = rememberPagerState(pageCount = images.size, initialOffscreenLimit = 2)
-
-    HorizontalPager(state = pagesState, modifier = modifier, reverseLayout = false) {page->
+    HorizontalPager(state = pagerState, modifier = modifier, reverseLayout = false) {page->
 
         Image(
             modifier = Modifier.fillMaxSize(),
