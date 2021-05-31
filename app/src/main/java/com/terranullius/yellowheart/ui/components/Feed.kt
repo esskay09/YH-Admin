@@ -1,6 +1,5 @@
 package com.terranullius.yellowheart.ui.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -10,10 +9,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheart.data.Initiative
-import com.terranullius.yellowheart.other.Constants.RT_DETAIL
 import com.terranullius.yellowheart.utils.Result
 
 @ExperimentalPagerApi
