@@ -29,7 +29,7 @@
 
     <style name="LoginTheme" parent="FirebaseUI">
         <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimaryDark">@color/secondaryLightColor</item>
         <item name="colorAccent">@color/primaryLightColor</item>
         <item name="colorButtonNormal">@color/secondaryColor</item>
         <item name="colorControlNormal">@android:color/white</item>
@@ -43,7 +43,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@android:color/white</item>
 
-        <item name="statusBarBackground">@color/secondaryColor</item>
+        <item name="statusBarBackground">@color/secondaryLightColor</item>
         <item name="android:colorBackground">@color/secondaryLightColor</item>
     </style>
 

@@ -19,7 +19,6 @@ object FirestoreUtils {
         } catch (e: Exception) {
             emptyList()
         }
-        //TODO MIGHT GET RETURNED BEFORE....
     }
 
 }

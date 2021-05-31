@@ -89,6 +89,7 @@ dependencies {
 
     //Horizontal Pagers
     implementation "com.google.accompanist:accompanist-pager:0.10.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.10.0"
 
     //Glide
     implementation "com.google.accompanist:accompanist-glide:0.10.0"

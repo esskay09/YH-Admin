@@ -1,5 +1,6 @@
 package com.terranullius.yellowheart.ui.components
 
+import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -14,6 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import com.terranullius.yellowheart.data.Initiative
 import com.terranullius.yellowheart.other.Constants.AB_HELP
@@ -21,6 +24,7 @@ import com.terranullius.yellowheart.other.Constants.AB_SHARE
 import com.terranullius.yellowheart.other.Constants.DIALOG_FB
 import com.terranullius.yellowheart.other.Constants.DIALOG_INSTA
 import com.terranullius.yellowheart.other.Constants.DIALOG_TWITTER
+import com.terranullius.yellowheart.ui.InitiativeTitle
 
 @ExperimentalPagerApi
 @Composable
@@ -112,26 +116,29 @@ fun InitiativeDetail(
                         shape = RoundedCornerShape(15.dp),
                         elevation = 12.dp
                     ) {
-                        ViewPagerImages(
-                            modifier = Modifier.fillMaxSize(),
-                            images = initiative.images,
-                            pagerState = pagerState
-                        )
+                        Box(modifier = Modifier.fillMaxSize()){
+                            ViewPagerImages(
+                                modifier = Modifier.fillMaxSize(),
+                                images = initiative.images,
+                                pagerState = pagerState
+                            )
+                            HorizontalPagerIndicator(pagerState = pagerState, modifier = Modifier.align(
+                                Alignment.BottomEnd).padding(6.dp))
+                        }
                     }
                     Spacer(Modifier.height(12.dp))
-                    Text(
+                    InitiativeTitle(
                         text = initiative.name,
-                        style = MaterialTheme.typography.h4.copy(
+                       /* style = MaterialTheme.typography.h4.copy(
                             fontFamily = FontFamily.Cursive,
                             color = Color.Black
-                        )
+                        )*/
                     )
                     Spacer(Modifier.height(14.dp))
+
                     Text(
                         text = initiative.descriptions[pagerState.currentPage],
-
                         style = MaterialTheme.typography.body1.copy(
-//                    fontFamily = FontFamily
                             color = Color.Black,
                             fontSize = 18.sp
                         )

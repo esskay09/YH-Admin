@@ -51,6 +51,7 @@ object FirebaseAuthUtils {
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .setTheme(R.style.LoginTheme)
+                    .setLogo(R.drawable.ic_heart_filled_firebaselogo)
                     .build(),
                 RC_SIGN_IN
             )
