@@ -28,9 +28,21 @@ fun ShareDialog(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ShareItem(name = "Facebook", imgRes = R.drawable.facebook, onShareClicked = onShareClicked)
-            ShareItem(name = "Instagram" , imgRes = R.drawable.instagram, onShareClicked = onShareClicked)
-            ShareItem(name = "Twitter", imgRes = R.drawable.twitter, onShareClicked = onShareClicked)
+            ShareItem(
+                name = "Facebook",
+                imgRes = R.drawable.facebook,
+                onShareClicked = onShareClicked
+            )
+            ShareItem(
+                name = "Instagram",
+                imgRes = R.drawable.instagram,
+                onShareClicked = onShareClicked
+            )
+            ShareItem(
+                name = "Twitter",
+                imgRes = R.drawable.twitter,
+                onShareClicked = onShareClicked
+            )
         }
     }
 
@@ -62,9 +74,8 @@ fun ShareItem(
             contentDescription = "",
             modifier = Modifier.size(50.dp)
         )
-        Divider(
+        Spacer(
             Modifier
-                .height(0.dp)
                 .width(8.dp)
         )
         Text(text = name)

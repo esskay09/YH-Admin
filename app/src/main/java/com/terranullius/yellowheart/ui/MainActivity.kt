@@ -15,10 +15,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
@@ -93,7 +96,11 @@ class MainActivity : ComponentActivity() {
             }
 
             YellowHeartTheme {
-                MyApp(isSignedIn = isSignedIn.value,
+
+
+
+
+               /* MyApp(isSignedIn = isSignedIn.value,
                     navController = navController,
                     initiatives = initiatives,
                     onBottomBarClicked = {
@@ -101,7 +108,7 @@ class MainActivity : ComponentActivity() {
                     },
                     onShareDialogClicked = { link ->
                         onShareDialogClicked(link)
-                    })
+                    })*/
             }
         }
     }

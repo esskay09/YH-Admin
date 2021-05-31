@@ -28,23 +28,24 @@ fun MyApp(
     initiatives: State<Result<List<Initiative>>>,
     onBottomBarClicked: (String) -> Unit,
     onShareDialogClicked: (link: String) -> Unit,
-) {
-        Surface(color = MaterialTheme.colors.primary) {
+    onHelpClicked: (isPayable: Boolean, link: String?, amount: Int?) -> Unit
+    ) {
+    Surface(color = MaterialTheme.colors.primary) {
 
         val selectedInitiative = remember {
             mutableStateOf(
                 Initiative(
                     name = "",
-                    description = "",
+                    descriptions = emptyList(),
                     isPayable = true,
                     images = emptyList(),
                     order = 0,
-                    shareLinks = ShareLinks("","","")
+                    shareLinks = ShareLinks("", "", "")
                 )
             )
         }
 
-        if (isSignedIn){
+        if (isSignedIn) {
             NavHost(navController = navController, startDestination = RT_SPLASH) {
                 composable(RT_SPLASH) {
                     SplashScreen(
@@ -67,9 +68,15 @@ fun MyApp(
                         onBottomBarItemClicked = {
                             onBottomBarClicked(it)
                         },
-                    onShareDialogClicked = onShareDialogClicked)
+                        onShareDialogClicked = onShareDialogClicked,
+                        onHelpClicked = { link: String?, isPayable: Boolean, amount: Int? ->
+                            onHelpClicked(
+                                isPayable, link, amount
+                            )
+                        })
+
                 }
             }
         }
     }
-    }
+}

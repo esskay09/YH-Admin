@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Dialog
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.terranullius.yellowheart.data.Initiative
+import com.terranullius.yellowheart.other.Constants.AB_HELP
 import com.terranullius.yellowheart.other.Constants.AB_SHARE
 import com.terranullius.yellowheart.other.Constants.DIALOG_FB
 import com.terranullius.yellowheart.other.Constants.DIALOG_INSTA
@@ -26,12 +27,17 @@ fun InitiativeDetail(
     initiative: Initiative,
     modifier: Modifier = Modifier,
     onBottomBarItemClicked: (String) -> Unit,
-    onShareDialogClicked: (link: String) -> Unit
+    onShareDialogClicked: (link: String) -> Unit,
+    onHelpClicked: (link: String?, isPayable: Boolean, amount: Int?) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
     val isShareClicked = remember {
         mutableStateOf(false)
     }
+    val isHelpClicked = remember {
+        mutableStateOf(false)
+    }
+
     val pagerState = rememberPagerState(
         initialPage = initiative.initialPage,
         pageCount = initiative.images.size,
@@ -48,7 +54,25 @@ fun InitiativeDetail(
                     DIALOG_FB -> onShareDialogClicked(initiative.shareLinks.fb)
                     DIALOG_TWITTER -> onShareDialogClicked(initiative.shareLinks.twitter)
                 }
+                isShareClicked.value = false
             })
+        }
+    }
+    if (isHelpClicked.value) {
+        Dialog(onDismissRequest = {
+            isHelpClicked.value = false
+        }) {
+            HelpDialog(
+                modifier = Modifier,
+                description = "Help bla bla bla bla bla bla bla...description", isDonatable = true,
+                onHelpClicked = {
+                    onHelpClicked(
+                        if (!initiative.isPayable) initiative.helpLink else null,
+                        initiative.isPayable,
+                        if (initiative.isPayable) it else null
+                    )
+                }
+            )
         }
     }
 
@@ -56,8 +80,9 @@ fun InitiativeDetail(
         bottomBar = {
             BottomBar(
                 onBottomBarItemClicked = {
-                    if (it == AB_SHARE) {
-                        isShareClicked.value = true
+                    when (it) {
+                        AB_SHARE -> isShareClicked.value = true
+                        AB_HELP -> isHelpClicked.value = true
                     }
                     onBottomBarItemClicked(it)
                 }
@@ -99,7 +124,8 @@ fun InitiativeDetail(
                     )
                     Spacer(Modifier.height(14.dp))
                     Text(
-                        text = initiative.description,
+                        //TODO MIGHT NOT WORK
+                        text = initiative.descriptions[pagerState.currentPage],
 
                         style = MaterialTheme.typography.body1.copy(
 //                    fontFamily = FontFamily
