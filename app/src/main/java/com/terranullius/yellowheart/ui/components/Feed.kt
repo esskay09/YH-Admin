@@ -19,7 +19,6 @@ import com.terranullius.yellowheart.utils.Result
 @ExperimentalPagerApi
 @Composable
 fun Feed(
-    navController: NavController,
     onInitiativeClicked: (initiative: Initiative) -> Unit,
     initiatives: Result<List<Initiative>>
 ) {
@@ -32,10 +31,7 @@ fun Feed(
             itemsIndexed(initiatives.data) { pos: Int, initiative: Initiative ->
                 Spacer(modifier = Modifier.height(8.dp))
                 FeedImageCard(
-                    initiative = initiative, modifier = Modifier.clickable {
-                        onInitiativeClicked(initiative)
-                        navController.navigate(RT_DETAIL)
-                    },
+                    initiative = initiative, modifier = Modifier,
                     onInitiativeClicked = {
                         onInitiativeClicked(it)
                     }

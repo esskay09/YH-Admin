@@ -54,7 +54,6 @@ fun MyApp(
                 }
                 composable(RT_FEED) {
                     Feed(
-                        navController = navController,
                         onInitiativeClicked = {
                             selectedInitiative.value = it
                             navController.navigate(RT_DETAIL)
