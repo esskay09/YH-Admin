@@ -1,29 +1,20 @@
 package com.terranullius.yellowheart.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import com.google.accompanist.coil.rememberCoilPainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.terranullius.yellowheart.data.Initiative
-import com.terranullius.yellowheart.other.Constants
 import com.terranullius.yellowheart.other.Constants.AB_SHARE
 import com.terranullius.yellowheart.other.Constants.DIALOG_FB
 import com.terranullius.yellowheart.other.Constants.DIALOG_INSTA
@@ -64,10 +55,6 @@ fun InitiativeDetail(
     Scaffold(modifier = modifier, scaffoldState = scaffoldState,
         bottomBar = {
             BottomBar(
-                modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(15.dp)
-                    ),
                 onBottomBarItemClicked = {
                     if (it == AB_SHARE) {
                         isShareClicked.value = true
