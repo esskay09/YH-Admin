@@ -25,7 +25,7 @@ fun HelpButton(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (showText) {
-                Text(text = "Help", modifier = Modifier.padding(end = 2.dp))
+                Text(text = "Send", modifier = Modifier.padding(end = 2.dp))
             }
             Icon(
                 modifier = Modifier.padding(start = 2.dp),

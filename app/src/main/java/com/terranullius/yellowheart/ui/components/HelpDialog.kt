@@ -3,17 +3,17 @@ package com.terranullius.yellowheart.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import terranullius.yellowheart.R
 
 @Composable
 fun HelpDialog(
@@ -28,7 +28,7 @@ fun HelpDialog(
             Column(
             ) {
                 val textFieldText = remember {
-                    mutableStateOf(" ")
+                    mutableStateOf("")
                 }
                 val isTextFieldTextError = remember {
                     mutableStateOf(false)
@@ -42,8 +42,11 @@ fun HelpDialog(
                         onValueChange = {
                             if (it.toIntOrNull() == null) {
                                 isTextFieldTextError.value = true
+                                textFieldText.value = it
+                            } else {
+                                isTextFieldTextError.value = false
+                                textFieldText.value = it
                             }
-                            textFieldText.value = it
                         },
                         singleLine = true,
                         maxLines = 1,
@@ -52,37 +55,23 @@ fun HelpDialog(
                         label = { Text(text = "Amount") },
                         keyboardOptions =
                         KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done
+                            keyboardType = KeyboardType.Number
                         )
                     )
                 }
                 Spacer(modifier = Modifier.height(2.dp))
-                Button(modifier = Modifier
-                    .fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.secondary
-                    ),
-                    onClick = {
-                        if (isDonatable) {
-                            if (!isTextFieldTextError.value) {
-                                onHelpClicked(
-                                    textFieldText.value.toInt()
-                                )
-                            }
-                        } else {
-                            onHelpClicked(0)
+
+                HelpButton(modifier = Modifier.fillMaxWidth()) {
+                    if (isDonatable) {
+                        if (!isTextFieldTextError.value && textFieldText.value.isNotBlank()) {
+                            onHelpClicked(
+                                textFieldText.value.toInt()
+                            )
                         }
-                    }) {
-                    Text(text = "Send")
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_heart_filled),
-                        tint = MaterialTheme.colors.primary,
-                        contentDescription = ""
-                    )
+                    } else {
+                        onHelpClicked(10)
+                    }
                 }
-            }
         }
     }
-}
+}}

@@ -31,7 +31,7 @@ fun BottomBar(
                         contentDescription = ""
                     )
                 },
-                label = { Text(text = "Join") },
+                label = { Text(text = "Join us") },
                 selected = false,
                 onClick = {
                     onBottomBarItemClicked(AB_JOIN)

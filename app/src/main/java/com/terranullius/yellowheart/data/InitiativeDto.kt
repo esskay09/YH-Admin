@@ -57,7 +57,7 @@ fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
             order = this.getLong(FB_FIELD_ORDER),
             shareLinks = shareLinks,
             helpDescription = this.getString(FB_FIELD_HELP_DESCRIPTION)!!,
-            helpLink = this.getString(FB_FIELD_HELP_LINK)!!
+            helpLink = this.getString(FB_FIELD_HELP_LINK)
         )
     } catch (e: Exception) {
         return null

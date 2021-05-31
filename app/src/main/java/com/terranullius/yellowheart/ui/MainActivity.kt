@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
                     onShareDialogClicked = { link ->
                         onShareDialogClicked(link)
                     },
-                    onHelpClicked = {isPayable: Boolean, link: String?, amount: Int? ->
+                    onHelpClicked = { isPayable: Boolean, link: String?, amount: Int? ->
                         onHelpDialogCLicked(isPayable, link, amount)
                     })
             }
@@ -135,18 +135,17 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun onHelpDialogCLicked(isPayable: Boolean, link: String?, amount: Int?) {
-        if (isPayable){
-            try{ initiatePayment(amount!!) } catch (e: Exception){Log.d("shit", e.message!!)}
-        }
-        else{
+        if (isPayable && amount != null) {
+            initiatePayment(amount)
+        } else if (!isPayable && link != null) {
             val intent = Intent(Intent.ACTION_VIEW).apply {
-                try{ data = Uri.parse(link!!) } catch (e: Exception){Log.d("shit", e.message!!)}
+                data = Uri.parse(link)
             }
             startActivity(intent)
         }
     }
 
-    private fun initiatePayment(amount: Int){
+    private fun initiatePayment(amount: Int) {
         val currentUser = FirebaseAuthUtils.getUser()
         PaymentUtils.initiatePayment(this@MainActivity, currentUser, amount)
     }

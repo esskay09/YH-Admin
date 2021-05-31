@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
@@ -64,14 +65,15 @@ fun InitiativeDetail(
         }) {
             HelpDialog(
                 modifier = Modifier,
-                //TODO ADD LINK.DESCRIPTION
-
-                description = "Help bla bla bla bla bla bla bla...description", isDonatable = true,
-                onHelpClicked = {
+                isDonatable = initiative.isPayable,
+                link = initiative.helpLink,
+                description = initiative.helpDescription ?: "Help",
+                onHelpClicked = { amount ->
+                    isHelpClicked.value = false
                     onHelpClicked(
-                        if (!initiative.isPayable) initiative.helpLink else null,
+                        initiative.helpLink,
                         initiative.isPayable,
-                        if (initiative.isPayable) it else null
+                        amount
                     )
                 }
             )
@@ -126,12 +128,12 @@ fun InitiativeDetail(
                     )
                     Spacer(Modifier.height(14.dp))
                     Text(
-                        //TODO MIGHT NOT WORK
                         text = initiative.descriptions[pagerState.currentPage],
 
                         style = MaterialTheme.typography.body1.copy(
 //                    fontFamily = FontFamily
-                            color = Color.Black
+                            color = Color.Black,
+                            fontSize = 18.sp
                         )
                     )
                 }
