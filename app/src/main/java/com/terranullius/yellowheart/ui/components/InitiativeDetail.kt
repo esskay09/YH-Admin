@@ -9,6 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -22,6 +24,7 @@ import com.terranullius.yellowheart.other.Constants.DIALOG_FB
 import com.terranullius.yellowheart.other.Constants.DIALOG_INSTA
 import com.terranullius.yellowheart.other.Constants.DIALOG_TWITTER
 import com.terranullius.yellowheart.ui.InitiativeTitle
+import terranullius.yellowheart.R
 
 @ExperimentalPagerApi
 @Composable
@@ -113,23 +116,28 @@ fun InitiativeDetail(
                         shape = RoundedCornerShape(15.dp),
                         elevation = 12.dp
                     ) {
-                        Box(modifier = Modifier.fillMaxSize()){
+                        Box(modifier = Modifier.fillMaxSize()) {
                             ViewPagerImages(
                                 modifier = Modifier.fillMaxSize(),
                                 images = initiative.images,
                                 pagerState = pagerState
                             )
-                            HorizontalPagerIndicator(pagerState = pagerState, modifier = Modifier.align(
-                                Alignment.BottomEnd).padding(6.dp))
+                            HorizontalPagerIndicator(
+                                pagerState = pagerState, modifier = Modifier
+                                    .align(
+                                        Alignment.BottomEnd
+                                    )
+                                    .padding(6.dp)
+                            )
                         }
                     }
                     Spacer(Modifier.height(12.dp))
                     InitiativeTitle(
                         text = initiative.name,
-                       /* style = MaterialTheme.typography.h4.copy(
-                            fontFamily = FontFamily.Cursive,
-                            color = Color.Black
-                        )*/
+                        /* style = MaterialTheme.typography.h4.copy(
+                             fontFamily = FontFamily.Cursive,
+                             color = Color.Black
+                         )*/
                     )
                     Spacer(Modifier.height(14.dp))
 
@@ -137,7 +145,7 @@ fun InitiativeDetail(
                         text = initiative.descriptions[pagerState.currentPage],
                         style = MaterialTheme.typography.body1.copy(
                             color = Color.Black,
-                            fontSize = 18.sp
+                            fontSize = integerResource(id = R.integer.initiative_detail_description).sp
                         )
                     )
                 }
