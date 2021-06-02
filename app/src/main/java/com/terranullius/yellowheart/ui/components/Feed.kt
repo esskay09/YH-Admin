@@ -1,9 +1,6 @@
 package com.terranullius.yellowheart.ui.components
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
@@ -28,7 +25,7 @@ fun Feed(
             itemsIndexed(initiatives.data) { pos: Int, initiative: Initiative ->
                 Spacer(modifier = Modifier.height(8.dp))
                 FeedImageCard(
-                    initiative = initiative, modifier = Modifier,
+                    initiative = initiative, modifier = Modifier.fillMaxHeight(0.35f),
                     onInitiativeClicked = {
                         onInitiativeClicked(it)
                     }

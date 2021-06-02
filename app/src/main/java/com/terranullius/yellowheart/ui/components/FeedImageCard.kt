@@ -36,7 +36,7 @@ fun FeedImageCard(
         shape = RoundedCornerShape(15.dp),
         elevation = 5.dp
     ) {
-        Box(modifier = Modifier.height(270.dp)) {
+        Box(modifier = Modifier) {
             ViewPagerImages(
                 pagerState = pagerState,
                 modifier = Modifier.fillMaxSize(),

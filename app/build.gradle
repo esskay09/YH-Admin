@@ -5,6 +5,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file(var)
+            storePassword 'trueman129$qwe'
+            keyAlias 'upload'
+            keyPassword 'as67809klj!$'
+        }
+    }
     compileSdk 30
     buildToolsVersion "30.0.3"
 
@@ -19,11 +27,13 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

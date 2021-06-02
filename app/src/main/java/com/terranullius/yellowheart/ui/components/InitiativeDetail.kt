@@ -1,7 +1,9 @@
 package com.terranullius.yellowheart.ui.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +38,7 @@ fun InitiativeDetail(
     onHelpClicked: (link: String?, isPayable: Boolean, amount: Int?) -> Unit
 ) {
     val scaffoldState = rememberScaffoldState()
+    val scrollState = rememberScrollState()
     val isShareClicked = remember {
         mutableStateOf(false)
     }
@@ -98,11 +101,10 @@ fun InitiativeDetail(
         }) {
 
         Surface(color = MaterialTheme.colors.primary) {
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(8.dp)
+                    .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = it.calculateBottomPadding())
             ) {
                 Column(
                     modifier = Modifier
@@ -112,7 +114,7 @@ fun InitiativeDetail(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(270.dp),
+                            .fillMaxHeight(0.4f),
                         shape = RoundedCornerShape(15.dp),
                         elevation = 12.dp
                     ) {
@@ -140,14 +142,16 @@ fun InitiativeDetail(
                          )*/
                     )
                     Spacer(Modifier.height(14.dp))
-
-                    Text(
-                        text = initiative.descriptions[pagerState.currentPage],
-                        style = MaterialTheme.typography.body1.copy(
-                            color = Color.Black,
-                            fontSize = integerResource(id = R.integer.initiative_detail_description).sp
+                    Box(modifier = Modifier.fillMaxHeight()){
+                        Text(
+                            modifier = Modifier.verticalScroll(state= scrollState),
+                            text = initiative.descriptions[pagerState.currentPage],
+                            style = MaterialTheme.typography.body1.copy(
+                                color = Color.Black,
+                                fontSize = integerResource(id = R.integer.initiative_detail_description).sp
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

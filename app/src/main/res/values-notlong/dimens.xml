@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources><integer name="initiative_detail_description">10</integer></resources>
+<resources>
+    <integer name="initiative_detail_description">14</integer>
+</resources>
