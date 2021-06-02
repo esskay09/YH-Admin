@@ -23,7 +23,7 @@ fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>, pagerSt
 
     HorizontalPager(state = pagerState, modifier = modifier, reverseLayout = false) { page ->
 
-        Box(modifier = modifier) {
+        Box(modifier = Modifier.fillMaxSize()) {
             val painter = rememberCoilPainter(request = images[page], fadeIn = true)
             Image(
                 modifier = Modifier.fillMaxSize(),

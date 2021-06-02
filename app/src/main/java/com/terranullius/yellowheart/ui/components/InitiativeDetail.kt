@@ -102,8 +102,7 @@ fun InitiativeDetail(
 
         Surface(color = MaterialTheme.colors.primary) {
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
+                modifier = modifier
                     .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = it.calculateBottomPadding())
             ) {
                 Column(

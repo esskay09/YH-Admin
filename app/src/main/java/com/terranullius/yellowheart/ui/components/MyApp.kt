@@ -1,6 +1,7 @@
 package com.terranullius.yellowheart.ui.components
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -8,6 +9,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -54,6 +56,9 @@ fun MyApp(
                 }
                 composable(RT_FEED) {
                     Feed(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(8.dp),
                         onInitiativeClicked = {
                             selectedInitiative.value = it
                             navController.navigate(RT_DETAIL)
@@ -63,6 +68,7 @@ fun MyApp(
                 }
                 composable(RT_DETAIL) {
                     InitiativeDetail(
+                        modifier = Modifier.fillMaxSize(),
                         initiative = selectedInitiative.value,
                         onBottomBarItemClicked = {
                             onBottomBarClicked(it)

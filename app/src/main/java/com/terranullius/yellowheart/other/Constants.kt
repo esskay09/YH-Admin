@@ -2,8 +2,6 @@ package com.terranullius.yellowheart.other
 
 import androidx.annotation.Keep
 
-
-@Keep
 object Constants {
     const val RC_SIGN_IN = 103
     const val RT_SPLASH = "splash"
@@ -32,6 +30,4 @@ object Constants {
     const val AB_HELP = "help"
 
     const val JOIN_LINK = "https://chat.whatsapp.com/FZIY9JlyvPP8vJ5YzBaY8s"
-
-
 }

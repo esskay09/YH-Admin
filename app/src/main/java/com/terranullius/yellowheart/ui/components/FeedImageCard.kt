@@ -36,7 +36,7 @@ fun FeedImageCard(
         shape = RoundedCornerShape(15.dp),
         elevation = 5.dp
     ) {
-        Box(modifier = Modifier) {
+        Box(modifier = Modifier.fillMaxSize()) {
             ViewPagerImages(
                 pagerState = pagerState,
                 modifier = Modifier.fillMaxSize(),
@@ -61,7 +61,7 @@ fun FeedImageCard(
                     .padding(8.dp),
                 style = MaterialTheme.typography.h6.copy(
                     color = Color.White,
-                    fontFamily = FontFamily.Cursive
+//                    fontFamily = FontFamily.Cursive
                 )
             )
             if (false) HelpButton(

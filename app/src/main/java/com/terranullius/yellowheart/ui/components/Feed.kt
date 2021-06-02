@@ -13,19 +13,18 @@ import com.terranullius.yellowheart.utils.Result
 @ExperimentalPagerApi
 @Composable
 fun Feed(
+    modifier: Modifier = Modifier,
     onInitiativeClicked: (initiative: Initiative) -> Unit,
     initiatives: Result<List<Initiative>>
 ) {
     when (initiatives) {
         is Result.Success -> LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
+            modifier = modifier
         ) {
             itemsIndexed(initiatives.data) { pos: Int, initiative: Initiative ->
                 Spacer(modifier = Modifier.height(8.dp))
                 FeedImageCard(
-                    initiative = initiative, modifier = Modifier.fillMaxHeight(0.35f),
+                    initiative = initiative, modifier = Modifier.height(290.dp),
                     onInitiativeClicked = {
                         onInitiativeClicked(it)
                     }
