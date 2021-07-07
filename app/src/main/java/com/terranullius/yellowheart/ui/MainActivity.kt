@@ -15,15 +15,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.window.Dialog
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.rememberNavController
@@ -31,6 +25,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
+
 import com.terranullius.yellowheart.other.Constants.AB_HELP
 import com.terranullius.yellowheart.other.Constants.AB_JOIN
 import com.terranullius.yellowheart.other.Constants.AB_SHARE
@@ -40,9 +35,6 @@ import com.terranullius.yellowheart.payment.PaymentUtils
 import com.terranullius.yellowheart.ui.components.*
 import com.terranullius.yellowheart.ui.theme.YellowHeartTheme
 import com.terranullius.yellowheart.viewmodels.MainViewModel
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheart.R
@@ -57,7 +49,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TODO SIDE EFFECT USE ACCOMPANIST
+
 
         FirebaseAuthUtils.registerListeners(this)
         PaymentUtils.registerListeners(this)
@@ -67,8 +59,6 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val isSignedIn = viewModel.isSignedInFlow.collectAsState()
             val initiatives = viewModel.initiativesFlow.collectAsState()
-
-            val scaffoldState = rememberScaffoldState()
 
             navController.addOnDestinationChangedListener { navController: NavController, navDestination: NavDestination, bundle: Bundle? ->
 
@@ -96,7 +86,8 @@ class MainActivity : ComponentActivity() {
             }
 
             YellowHeartTheme {
-                MyApp(isSignedIn = isSignedIn.value,
+                MyApp(
+                    isSignedIn = isSignedIn.value,
                     navController = navController,
                     initiatives = initiatives,
                     onBottomBarClicked = {

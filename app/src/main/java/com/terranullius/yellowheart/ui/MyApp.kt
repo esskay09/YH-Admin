@@ -1,4 +1,4 @@
-package com.terranullius.yellowheart.ui.components
+package com.terranullius.yellowheart.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
