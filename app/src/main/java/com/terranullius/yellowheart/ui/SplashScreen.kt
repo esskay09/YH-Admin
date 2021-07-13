@@ -1,4 +1,4 @@
-package com.terranullius.yellowheart.ui.components
+package com.terranullius.yellowheart.ui
 
 import android.animation.Animator
 import androidx.compose.material.MaterialTheme
@@ -20,11 +20,9 @@ import terranullius.yellowheart.R
 fun SplashScreen(modifier: Modifier = Modifier, navController: NavController) {
 
     Surface(modifier = modifier, color = MaterialTheme.colors.secondaryVariant) {
-        val visibility = remember { mutableStateOf(0) }
         val context = LocalContext.current
         val customView = remember { LottieAnimationView(context) }
 
-        //TODO SIDE EFFECT
         AndroidView({ customView }, modifier = modifier) { view ->
 
             customView.addAnimatorListener(object : Animator.AnimatorListener {

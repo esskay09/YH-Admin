@@ -1,10 +1,13 @@
-package com.terranullius.yellowheart.ui.components
+package com.terranullius.yellowheart.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -26,6 +30,10 @@ import com.terranullius.yellowheart.other.Constants.DIALOG_FB
 import com.terranullius.yellowheart.other.Constants.DIALOG_INSTA
 import com.terranullius.yellowheart.other.Constants.DIALOG_TWITTER
 import com.terranullius.yellowheart.ui.InitiativeTitle
+import com.terranullius.yellowheart.ui.components.BottomBar
+import com.terranullius.yellowheart.ui.components.HelpDialog
+import com.terranullius.yellowheart.ui.components.ShareDialog
+import com.terranullius.yellowheart.ui.components.ViewPagerImages
 import terranullius.yellowheart.R
 
 @ExperimentalPagerApi
@@ -88,12 +96,25 @@ fun InitiativeDetail(
     }
 
     Scaffold(modifier = modifier, scaffoldState = scaffoldState,
+        floatingActionButton = {
+                               FloatingActionButton(onClick = {
+                                   isHelpClicked.value = true
+                                   onBottomBarItemClicked(AB_HELP)
+                               }) {
+                                   Icon(
+                                       painter = painterResource(id = R.drawable.ic_heart_filled),
+                                       contentDescription = "Help",
+                                       tint = MaterialTheme.colors.primary
+                                   )
+                               }
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        isFloatingActionButtonDocked = true,
         bottomBar = {
             BottomBar(
                 onBottomBarItemClicked = {
                     when (it) {
-                        AB_SHARE -> isShareClicked.value = true
-                        AB_HELP -> isHelpClicked.value = true
+                        AB_SHARE -> isHelpClicked.value = true
                     }
                     onBottomBarItemClicked(it)
                 }
@@ -115,7 +136,7 @@ fun InitiativeDetail(
                             .fillMaxWidth()
                             .fillMaxHeight(0.4f),
                         shape = RoundedCornerShape(15.dp),
-                        elevation = 12.dp
+                        elevation = 18.dp
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             ViewPagerImages(
@@ -135,10 +156,7 @@ fun InitiativeDetail(
                     Spacer(Modifier.height(12.dp))
                     InitiativeTitle(
                         text = initiative.name,
-                        /* style = MaterialTheme.typography.h4.copy(
-                             fontFamily = FontFamily.Cursive,
-                             color = Color.Black
-                         )*/
+
                     )
                     Spacer(Modifier.height(14.dp))
                     Box(modifier = Modifier.fillMaxHeight()){

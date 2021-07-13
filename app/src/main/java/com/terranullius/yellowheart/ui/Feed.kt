@@ -1,4 +1,4 @@
-package com.terranullius.yellowheart.ui.components
+package com.terranullius.yellowheart.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,6 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheart.data.Initiative
+import com.terranullius.yellowheart.ui.components.CircularProgress
+import com.terranullius.yellowheart.ui.components.FeedImageCard
 import com.terranullius.yellowheart.utils.Result
 
 @ExperimentalPagerApi

@@ -7,24 +7,35 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
+import com.terranullius.yellowheart.other.Constants
 
 import com.terranullius.yellowheart.other.Constants.AB_HELP
 import com.terranullius.yellowheart.other.Constants.AB_JOIN
@@ -42,14 +53,12 @@ import terranullius.yellowheart.R
 
 //TODO REFRACTOR LENGTHY CALLBACKS INTO VIEWMODEL
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
 
         FirebaseAuthUtils.registerListeners(this)
         PaymentUtils.registerListeners(this)
@@ -86,19 +95,19 @@ class MainActivity : ComponentActivity() {
             }
 
             YellowHeartTheme {
-                MyApp(
-                    isSignedIn = isSignedIn.value,
-                    navController = navController,
-                    initiatives = initiatives,
-                    onBottomBarClicked = {
-                        onBottomBarClicked(it)
-                    },
-                    onShareDialogClicked = { link ->
-                        onShareDialogClicked(link)
-                    },
-                    onHelpClicked = { isPayable: Boolean, link: String?, amount: Int? ->
-                        onHelpDialogCLicked(isPayable, link, amount)
-                    })
+                  MyApp(
+                      isSignedIn = isSignedIn.value,
+                      navController = navController,
+                      initiatives = initiatives,
+                      onBottomBarClicked = {
+                          onBottomBarClicked(it)
+                      },
+                      onShareDialogClicked = { link ->
+                          onShareDialogClicked(link)
+                      },
+                      onHelpClicked = { isPayable: Boolean, link: String?, amount: Int? ->
+                          onHelpDialogCLicked(isPayable, link, amount)
+                      })
             }
         }
     }

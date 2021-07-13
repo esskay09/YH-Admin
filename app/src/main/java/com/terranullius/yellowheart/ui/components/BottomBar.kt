@@ -1,6 +1,7 @@
 package com.terranullius.yellowheart.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
@@ -22,7 +23,7 @@ fun BottomBar(
     colorBg: Color = MaterialTheme.colors.secondary,
     onBottomBarItemClicked: (id: String) -> Unit
 ) {
-    BottomAppBar(modifier = modifier, backgroundColor = colorBg, elevation = 20.dp) {
+    BottomAppBar(modifier = modifier, cutoutShape = CircleShape, backgroundColor = colorBg, elevation = 20.dp) {
         BottomNavigation(modifier = Modifier.fillMaxWidth(), backgroundColor = colorBg) {
             BottomNavigationItem(
                 icon = {
@@ -31,26 +32,11 @@ fun BottomBar(
                         contentDescription = ""
                     )
                 },
-                label = { Text(text = "Join us") },
-                selected = false,
                 onClick = {
                     onBottomBarItemClicked(AB_JOIN)
                 },
-                alwaysShowLabel = true
-            )
-            BottomNavigationItem(
-                icon = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_heart_filled),
-                        contentDescription = "Help"
-                    )
-                },
-                label = { Text(text = "Help") },
-                selected = false,
-                onClick = {
-                    onBottomBarItemClicked(AB_HELP)
-                },
-                alwaysShowLabel = true
+                alwaysShowLabel = true,
+                selected = false
             )
             BottomNavigationItem(
                 icon = {
@@ -59,12 +45,11 @@ fun BottomBar(
                         contentDescription = ""
                     )
                 },
-                label = { Text(text = "Share") },
-                selected = false,
                 onClick = {
                     onBottomBarItemClicked(AB_SHARE)
                 },
-                alwaysShowLabel = true
+                alwaysShowLabel = true,
+                selected = false
             )
         }
     }
