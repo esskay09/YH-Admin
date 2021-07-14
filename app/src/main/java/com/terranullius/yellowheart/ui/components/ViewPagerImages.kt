@@ -1,8 +1,6 @@
 package com.terranullius.yellowheart.ui.components
 
 import android.util.Log
-import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -27,6 +25,9 @@ import com.google.accompanist.pager.PagerState
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 @ExperimentalPagerApi
 @Composable
@@ -38,16 +39,21 @@ fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>, pagerSt
 
     LaunchedEffect(key1 = pagerState.currentPage){
 
-        Log.d("fuck", youtubePlayerList.toString())
+        val currentPage = pagerState.currentPage
 
-        if (!images[pagerState.currentPage].contains("youtubeId=")){
+        if (!images[currentPage].contains("youtubeID=")){
+
+            //Page doesn't contain a video
             youtubePlayerList.forEach {
                 it.pause()
             }
-        } else{
-            youtubePlayerList.find {
-                it.index == pagerState.currentPage
-            }?.play()
+            val delayMillis = Random.nextInt(3, 7) * 1000L
+            launch {
+                delay(delayMillis)
+                pagerState.animateScrollToPage(currentPage+1)
+            }
+        } else {
+            youtubePlayerList.find { it.index == currentPage }?.play()
         }
     }
 
@@ -58,15 +64,19 @@ fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>, pagerSt
                 AndroidView(
                     modifier = Modifier
                         .fillMaxSize(),
-                    factory = {
-                        val youTubePlayerView = YouTubePlayerView(it)
-                        (it as AppCompatActivity).lifecycle.addObserver(youTubePlayerView)
+                    factory = {context ->
+                        val youTubePlayerView = YouTubePlayerView(context)
+                        (context as AppCompatActivity).lifecycle.addObserver(youTubePlayerView)
                         val videoId = images[page].substringAfter("=")
                         youTubePlayerView.apply {
                             getYouTubePlayerWhenReady(object : YouTubePlayerCallback {
                                 override fun onYouTubePlayer(youTubePlayer: YouTubePlayer) {
                                     youTubePlayer.loadVideo(videoId, 0f)
-                                    youtubePlayerList.add(YoutubePlayerIndexed(youTubePlayer, page))
+                                    youtubePlayerList.find {
+                                        it.index == page
+                                    }?.let {
+                                        it.youTubePlayer = youTubePlayer
+                                    } ?: youtubePlayerList.add(YoutubePlayerIndexed(youTubePlayer, page))
                                 }
                             })
                         }
@@ -107,7 +117,7 @@ fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>, pagerSt
     }
 }
 
-class YoutubePlayerIndexed(private val youTubePlayer: YouTubePlayer, val index: Int){
+class YoutubePlayerIndexed(var youTubePlayer: YouTubePlayer, val index: Int){
     fun play(){
         youTubePlayer.play()
     }

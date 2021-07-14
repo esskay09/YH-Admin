@@ -26,7 +26,7 @@ fun FeedImageCard(
     modifier: Modifier = Modifier,
     onInitiativeClicked: (initiative: Initiative) -> Unit
 ) {
-    val pagerState = rememberPagerState(pageCount = min(initiative.images.size, initiative.descriptions.size), initialOffscreenLimit = 1)
+    val pagerState = rememberPagerState(pageCount = min(initiative.images.size, initiative.descriptions.size), initialOffscreenLimit = 1, infiniteLoop = true)
 
     Card(
         modifier = modifier

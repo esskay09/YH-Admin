@@ -58,7 +58,8 @@ fun InitiativeDetail(
     val pagerState = rememberPagerState(
         initialPage = initiative.initialPage,
         pageCount = min(initiative.images.size,initiative.descriptions.size),
-        initialOffscreenLimit = 1
+        initialOffscreenLimit = 1,
+        infiniteLoop = true
     )
 
     if (isShareClicked.value) {
