@@ -1,5 +1,6 @@
 package com.terranullius.yellowheart.ui.components
 
+import android.util.Log
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,9 @@ fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>, pagerSt
     }
 
     LaunchedEffect(key1 = pagerState.currentPage){
+
+        Log.d("fuck", youtubePlayerList.toString())
+
         if (!images[pagerState.currentPage].contains("youtubeId=")){
             youtubePlayerList.forEach {
                 it.pause()
@@ -67,8 +71,16 @@ fun ViewPagerImages(modifier: Modifier = Modifier, images: List<String>, pagerSt
                             })
                         }
                     }) {
-                    it.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    it.enterFullScreen()
                     it.enableBackgroundPlayback(false)
+                    it.getPlayerUiController().apply {
+                        showFullscreenButton(false)
+                        showVideoTitle(false)
+                        showYouTubeButton(false)
+                        showSeekBar(true)
+                        showMenuButton(false)
+                    }
+
                 }
             }
             else {
