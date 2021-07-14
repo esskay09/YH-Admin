@@ -1,6 +1,8 @@
 package com.terranullius.yellowheart.ui.components
 
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -47,7 +50,33 @@ fun ViewPagerImages(
         mutableStateOf(15)
     }
 
+    var imageSize by remember {
+        mutableStateOf(1f)
+    }
+
     LaunchedEffect(key1 = pagerState.currentPage) {
+        launch {
+            while (true){
+               if (imageSize>= 1.2f) {
+                   while (imageSize >= 1.2f) {
+                       Log.d("fuck", imageSize.toString())
+                       if (!pagerState.isScrollInProgress) {
+                           imageSize -= 0.002f
+                       }
+                       delay(50L)
+                   }
+               }
+
+                while (imageSize < 1.2f) {
+                    Log.d("fuck", imageSize.toString())
+                    if (!pagerState.isScrollInProgress) {
+                        imageSize += 0.002f
+                    }
+                    delay(50L)
+                }
+                delay(50L)
+            }
+        }
         val currentPage = pagerState.currentPage
         val currentYoutubePlayer = youtubePlayerList.find {
             it.index == currentPage
@@ -56,6 +85,9 @@ fun ViewPagerImages(
         if (!images[currentPage].contains("youtubeID=")){
             //Image
             scrollPage(pagerState)
+            youtubePlayerList.forEach{
+                it.pause()
+            }
         } else{ //Video
             currentYoutubePlayer?.let { currentPlayer->
                 if (isVideoPlaying.value){
@@ -160,7 +192,7 @@ fun ViewPagerImages(
 
                             when (state) {
                                 PlayerState.PAUSED -> {
-                                    setPlaying(false)
+                                    currentPlayingVideoIndex = 15
                                     currentPlayer?.isBuffering = false
                                 }
                                 PlayerState.ENDED -> {
@@ -211,12 +243,24 @@ fun ViewPagerImages(
                 }
             } else {
                 val painter = rememberCoilPainter(request = images[page], fadeIn = true)
-                Image(
-                    modifier = Modifier.fillMaxSize(),
-                    painter = painter,
-                    contentScale = ContentScale.FillBounds,
-                    contentDescription = ""
-                )
+                val modifierImage = remember {
+                    Modifier
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            if (pagerState.currentPage == page) {
+                                scaleY = imageSize
+                                scaleX = imageSize
+                            }
+                        }
+                }
+                Box(modifier = Modifier.fillMaxSize()){
+                    Image(
+                        modifier = modifierImage,
+                        painter = painter,
+                        contentScale = ContentScale.FillBounds,
+                        contentDescription = ""
+                    )
+                }
                 when (painter.loadState) {
                     is ImageLoadState.Loading -> CircularProgressIndicator(
                         modifier = Modifier
