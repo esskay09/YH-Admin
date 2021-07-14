@@ -35,6 +35,7 @@ import com.terranullius.yellowheart.ui.components.HelpDialog
 import com.terranullius.yellowheart.ui.components.ShareDialog
 import com.terranullius.yellowheart.ui.components.ViewPagerImages
 import terranullius.yellowheart.R
+import kotlin.math.min
 
 @ExperimentalPagerApi
 @Composable
@@ -56,8 +57,8 @@ fun InitiativeDetail(
 
     val pagerState = rememberPagerState(
         initialPage = initiative.initialPage,
-        pageCount = initiative.images.size,
-        initialOffscreenLimit = 2
+        pageCount = min(initiative.images.size,initiative.descriptions.size),
+        initialOffscreenLimit = 1
     )
 
     if (isShareClicked.value) {
@@ -162,7 +163,7 @@ fun InitiativeDetail(
                     Box(modifier = Modifier.fillMaxHeight()){
                         Text(
                             modifier = Modifier.verticalScroll(state= scrollState),
-                            text = initiative.descriptions[pagerState.currentPage],
+                            text = initiative.descriptions[pagerState.currentPage] ,
                             style = MaterialTheme.typography.body1.copy(
                                 color = Color.Black,
                                 fontSize = integerResource(id = R.integer.initiative_detail_description).sp

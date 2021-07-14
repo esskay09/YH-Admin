@@ -6,11 +6,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.AttributeSet
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
+import android.view.*
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -34,6 +34,9 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.paykun.sdk.eventbus.Events
 import com.paykun.sdk.helper.PaykunHelper
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerCallback
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import com.terranullius.yellowheart.firebase.FirebaseAuthUtils
 import com.terranullius.yellowheart.other.Constants
 
@@ -95,19 +98,19 @@ class MainActivity : AppCompatActivity() {
             }
 
             YellowHeartTheme {
-                  MyApp(
-                      isSignedIn = isSignedIn.value,
-                      navController = navController,
-                      initiatives = initiatives,
-                      onBottomBarClicked = {
-                          onBottomBarClicked(it)
-                      },
-                      onShareDialogClicked = { link ->
-                          onShareDialogClicked(link)
-                      },
-                      onHelpClicked = { isPayable: Boolean, link: String?, amount: Int? ->
-                          onHelpDialogCLicked(isPayable, link, amount)
-                      })
+                MyApp(
+                    isSignedIn = isSignedIn.value,
+                    navController = navController,
+                    initiatives = initiatives,
+                    onBottomBarClicked = {
+                        onBottomBarClicked(it)
+                    },
+                    onShareDialogClicked = { link ->
+                        onShareDialogClicked(link)
+                    },
+                    onHelpClicked = { isPayable: Boolean, link: String?, amount: Int? ->
+                        onHelpDialogCLicked(isPayable, link, amount)
+                    })
             }
         }
     }

@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.terranullius.yellowheart.data.Initiative
+import kotlin.math.min
 
 @ExperimentalPagerApi
 @Composable
@@ -25,7 +26,7 @@ fun FeedImageCard(
     modifier: Modifier = Modifier,
     onInitiativeClicked: (initiative: Initiative) -> Unit
 ) {
-    val pagerState = rememberPagerState(pageCount = initiative.images.size, initialOffscreenLimit = 2)
+    val pagerState = rememberPagerState(pageCount = min(initiative.images.size, initiative.descriptions.size), initialOffscreenLimit = 1)
 
     Card(
         modifier = modifier

@@ -105,4 +105,7 @@ dependencies {
     //Glide
     implementation "com.google.accompanist:accompanist-glide:0.13.0"
 
+    //Youtube
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
+
 }
