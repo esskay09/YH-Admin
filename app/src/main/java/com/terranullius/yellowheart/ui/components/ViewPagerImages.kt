@@ -1,6 +1,5 @@
 package com.terranullius.yellowheart.ui.components
 
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -124,7 +123,13 @@ fun ViewPagerImages(
                             youTubePlayer: YouTubePlayer,
                             error: PlayerConstants.PlayerError
                         ) {
+                            setPlaying(false)
+                        }
 
+                        private fun setPlaying(value: Boolean) {
+                            if (currentPlayingVideoIndex == page) {
+                                isVideoPlaying.value = value
+                            }
                         }
 
                         override fun onPlaybackQualityChange(
@@ -155,11 +160,11 @@ fun ViewPagerImages(
 
                             when (state) {
                                 PlayerState.PAUSED -> {
-                                    isVideoPlaying.value = false
+                                    setPlaying(false)
                                     currentPlayer?.isBuffering = false
                                 }
                                 PlayerState.ENDED -> {
-                                    isVideoPlaying.value = false
+                                    setPlaying(false)
                                     currentPlayer?.isBuffering = false
                                 }
                                 PlayerState.PLAYING -> {
