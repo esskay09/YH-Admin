@@ -8,11 +8,11 @@ import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
@@ -24,7 +24,8 @@ import kotlin.math.min
 fun FeedImageCard(
     initiative: Initiative,
     modifier: Modifier = Modifier,
-    onInitiativeClicked: (initiative: Initiative) -> Unit
+    onInitiativeClicked: (initiative: Initiative) -> Unit,
+    isVideoPlaying: MutableState<Boolean>
 ) {
     val pagerState = rememberPagerState(pageCount = min(initiative.images.size, initiative.descriptions.size), initialOffscreenLimit = 1, infiniteLoop = true)
 
@@ -41,7 +42,11 @@ fun FeedImageCard(
             ViewPagerImages(
                 pagerState = pagerState,
                 modifier = Modifier.fillMaxSize(),
-                images = initiative.images
+                images = initiative.images,
+                onYoutubePlayerClicked = {
+                    onInitiativeClicked(initiative.copy(initialPage = pagerState.currentPage))
+                },
+                isVideoPlaying = isVideoPlaying
             )
             Box(
                 modifier = Modifier

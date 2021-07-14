@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -19,6 +21,9 @@ fun Feed(
     onInitiativeClicked: (initiative: Initiative) -> Unit,
     initiatives: Result<List<Initiative>>
 ) {
+    var isVideoPlaying = remember{
+        mutableStateOf(false)
+    }
     when (initiatives) {
         is Result.Success -> LazyColumn(
             modifier = modifier
@@ -29,7 +34,8 @@ fun Feed(
                     initiative = initiative, modifier = Modifier.height(290.dp),
                     onInitiativeClicked = {
                         onInitiativeClicked(it)
-                    }
+                    },
+                    isVideoPlaying = isVideoPlaying
                 )
             }
         }

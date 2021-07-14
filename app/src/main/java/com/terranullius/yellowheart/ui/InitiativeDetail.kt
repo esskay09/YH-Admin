@@ -1,20 +1,16 @@
 package com.terranullius.yellowheart.ui
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -29,7 +25,6 @@ import com.terranullius.yellowheart.other.Constants.AB_SHARE
 import com.terranullius.yellowheart.other.Constants.DIALOG_FB
 import com.terranullius.yellowheart.other.Constants.DIALOG_INSTA
 import com.terranullius.yellowheart.other.Constants.DIALOG_TWITTER
-import com.terranullius.yellowheart.ui.InitiativeTitle
 import com.terranullius.yellowheart.ui.components.BottomBar
 import com.terranullius.yellowheart.ui.components.HelpDialog
 import com.terranullius.yellowheart.ui.components.ShareDialog
@@ -52,6 +47,10 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
     val isHelpClicked = remember {
+        mutableStateOf(false)
+    }
+
+    val isVideoPlaying = remember{
         mutableStateOf(false)
     }
 
@@ -144,7 +143,8 @@ fun InitiativeDetail(
                             ViewPagerImages(
                                 modifier = Modifier.fillMaxSize(),
                                 images = initiative.images,
-                                pagerState = pagerState
+                                pagerState = pagerState,
+                                isVideoPlaying = isVideoPlaying
                             )
                             HorizontalPagerIndicator(
                                 pagerState = pagerState, modifier = Modifier
