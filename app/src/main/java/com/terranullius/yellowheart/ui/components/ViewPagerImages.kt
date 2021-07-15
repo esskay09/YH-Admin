@@ -4,9 +4,8 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
@@ -57,11 +56,12 @@ fun ViewPagerImages(
 
     LaunchedEffect(key1 = pagerState.currentPage) {
         launch {
-            if (imageSize > 1.4f) imageSize = 1f
             while (imageSize <= 1.4f) {
 
-                if (!pagerState.isScrollInProgress) imageSize += 0.0013f
+                if (!pagerState.isScrollInProgress) imageSize += 0.0015f
                 else imageSize = 1f
+
+                if (imageSize > 1.4f) imageSize = 1f
 
                 delay(50L)
             }
@@ -230,6 +230,36 @@ fun ViewPagerImages(
                     }
 
                 }
+
+                Box(modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .fillMaxHeight(0.89f)
+                    .fillMaxWidth(0.4f)
+                    .clickable {
+                        onYoutubePlayerClicked()
+                    })
+                Box(modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .fillMaxHeight(0.89f)
+                    .fillMaxWidth(0.4f)
+                    .clickable {
+                        onYoutubePlayerClicked()
+                    })
+                Box(modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.4f)
+                    .clickable {
+                        onYoutubePlayerClicked()
+                    })
+                Box(modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.4f)
+                    .clickable {
+                        onYoutubePlayerClicked()
+                    })
+
             } else {
                 val painter = rememberCoilPainter(request = images[page], fadeIn = true)
 
