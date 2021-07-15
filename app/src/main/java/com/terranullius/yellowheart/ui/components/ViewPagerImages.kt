@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
@@ -56,24 +57,12 @@ fun ViewPagerImages(
 
     LaunchedEffect(key1 = pagerState.currentPage) {
         launch {
-            while (true){
-               if (imageSize>= 1.2f) {
-                   while (imageSize >= 1.2f) {
-                       Log.d("fuck", imageSize.toString())
-                       if (!pagerState.isScrollInProgress) {
-                           imageSize -= 0.002f
-                       }
-                       delay(50L)
-                   }
-               }
+            if (imageSize > 1.4f) imageSize = 1f
+            while (imageSize <= 1.4f) {
 
-                while (imageSize < 1.2f) {
-                    Log.d("fuck", imageSize.toString())
-                    if (!pagerState.isScrollInProgress) {
-                        imageSize += 0.002f
-                    }
-                    delay(50L)
-                }
+                if (!pagerState.isScrollInProgress) imageSize += 0.0013f
+                else imageSize = 1f
+
                 delay(50L)
             }
         }
@@ -82,28 +71,27 @@ fun ViewPagerImages(
             it.index == currentPage
         }
         //Check if it's an image
-        if (!images[currentPage].contains("youtubeID=")){
+        if (!images[currentPage].contains("youtubeID=")) {
             //Image
             scrollPage(pagerState)
-            youtubePlayerList.forEach{
+            youtubePlayerList.forEach {
                 it.pause()
             }
-        } else{ //Video
-            currentYoutubePlayer?.let { currentPlayer->
-                if (isVideoPlaying.value){
-                    if (currentPlayingVideoIndex == currentPage){ scrollPage(pagerState)}
-                    else onBuffered(currentPlayer){
-                        if (isVideoPlaying.value){
-                            if (currentPlayingVideoIndex != currentPage) scrollPage(pagerState)
-                        }
-                        else currentPlayer.play()
-                    }
-                } else{
-                    onBuffered(currentPlayer){
+        } else { //Video
+            currentYoutubePlayer?.let { currentPlayer ->
+                if (isVideoPlaying.value) {
+                    if (currentPlayingVideoIndex == currentPage) {
+                        scrollPage(pagerState)
+                    } else onBuffered(currentPlayer) {
                         if (isVideoPlaying.value) {
                             if (currentPlayingVideoIndex != currentPage) scrollPage(pagerState)
-                        }
-                        else currentPlayer.play()
+                        } else currentPlayer.play()
+                    }
+                } else {
+                    onBuffered(currentPlayer) {
+                        if (isVideoPlaying.value) {
+                            if (currentPlayingVideoIndex != currentPage) scrollPage(pagerState)
+                        } else currentPlayer.play()
                     }
                 }
             }
@@ -188,7 +176,8 @@ fun ViewPagerImages(
                         ) {
 
                             val currentPlayer = youtubePlayerList.find { playerIndexed ->
-                                playerIndexed.index == page }
+                                playerIndexed.index == page
+                            }
 
                             when (state) {
                                 PlayerState.PAUSED -> {
@@ -243,19 +232,20 @@ fun ViewPagerImages(
                 }
             } else {
                 val painter = rememberCoilPainter(request = images[page], fadeIn = true)
-                val modifierImage = remember {
-                    Modifier
-                        .fillMaxSize()
-                        .graphicsLayer {
-                            if (pagerState.currentPage == page) {
-                                scaleY = imageSize
-                                scaleX = imageSize
-                            }
-                        }
-                }
-                Box(modifier = Modifier.fillMaxSize()){
+
+                Box(modifier = Modifier.fillMaxSize()) {
                     Image(
-                        modifier = modifierImage,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .graphicsLayer {
+                                if (pagerState.targetPage == page || pagerState.currentPage == page) {
+                                    scaleY = imageSize
+                                    scaleX = imageSize
+                                } else {
+                                    scaleY = 1f
+                                    scaleX = 1f
+                                }
+                            },
                         painter = painter,
                         contentScale = ContentScale.FillBounds,
                         contentDescription = ""
@@ -278,24 +268,23 @@ fun ViewPagerImages(
 }
 
 @OptIn(ExperimentalPagerApi::class)
-fun CoroutineScope.scrollPage(pagerState: PagerState){
+fun CoroutineScope.scrollPage(pagerState: PagerState) {
     launch {
-        val randomDelayMillis = Random.nextInt(4,11) * 1000L
+        val randomDelayMillis = Random.nextInt(4, 11) * 1000L
         delay(randomDelayMillis)
         pagerState.animateScrollToPage(pagerState.currentPage + 1)
     }
 }
 
-private fun CoroutineScope.onBuffered(youTubePlayer: YoutubePlayerIndexed, onBuffered: () -> Unit){
+private fun CoroutineScope.onBuffered(youTubePlayer: YoutubePlayerIndexed, onBuffered: () -> Unit) {
     if (!youTubePlayer.isBuffering) onBuffered()
     else {
-        launch{
-            while (true){
+        launch {
+            while (true) {
                 if (!youTubePlayer.isBuffering) {
                     onBuffered()
                     return@launch
-                }
-                else delay(150L)
+                } else delay(150L)
             }
         }
     }
