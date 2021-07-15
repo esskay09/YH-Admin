@@ -18,7 +18,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.terranullius.yellowheart"
+        applicationId "com.terranullius.yellowheartadmin"
         minSdk 21
         targetSdk 30
         versionCode 1
