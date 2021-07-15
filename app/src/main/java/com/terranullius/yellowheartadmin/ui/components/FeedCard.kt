@@ -62,7 +62,7 @@ fun FeedImageCard(
                     )
             )
             Text(
-                text = initiative.name, modifier = Modifier
+                text = initiative.title, modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(8.dp),
                 style = MaterialTheme.typography.h6.copy(

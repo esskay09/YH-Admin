@@ -36,7 +36,7 @@ fun MyApp(
         val selectedInitiative = remember {
             mutableStateOf(
                 Initiative(
-                    name = "",
+                    title = "",
                     descriptions = emptyList(),
                     isPayable = true,
                     images = emptyList(),

@@ -47,54 +47,6 @@ fun ViewPagerImages(
         mutableStateOf(15)
     }
 
-    var imageSize by remember {
-        mutableStateOf(1f)
-    }
-
-    LaunchedEffect(key1 = pagerState.currentPage) {
-        launch {
-            while (imageSize <= 1.4f) {
-
-                if (!pagerState.isScrollInProgress) imageSize += 0.0015f
-                else imageSize = 1f
-
-                if (imageSize > 1.4f) imageSize = 1f
-
-                delay(50L)
-            }
-        }
-        val currentPage = pagerState.currentPage
-        val currentYoutubePlayer = youtubePlayerList.find {
-            it.index == currentPage
-        }
-        //Check if it's an image
-        if (!images[currentPage].contains("youtubeID=")) {
-            //Image
-            scrollPage(pagerState)
-            youtubePlayerList.forEach {
-                it.pause()
-            }
-        } else { //Video
-            currentYoutubePlayer?.let { currentPlayer ->
-                if (isVideoPlaying.value) {
-                    if (currentPlayingVideoIndex == currentPage) {
-                        scrollPage(pagerState)
-                    } else onBuffered(currentPlayer) {
-                        if (isVideoPlaying.value) {
-                            if (currentPlayingVideoIndex != currentPage) scrollPage(pagerState)
-                        } else currentPlayer.play()
-                    }
-                } else {
-                    onBuffered(currentPlayer) {
-                        if (isVideoPlaying.value) {
-                            if (currentPlayingVideoIndex != currentPage) scrollPage(pagerState)
-                        } else currentPlayer.play()
-                    }
-                }
-            }
-        }
-    }
-
     HorizontalPager(state = pagerState, modifier = modifier, reverseLayout = false) { page ->
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -178,7 +130,6 @@ fun ViewPagerImages(
 
                             when (state) {
                                 PlayerState.PAUSED -> {
-                                    currentPlayingVideoIndex = 15
                                     currentPlayer?.isBuffering = false
                                 }
                                 PlayerState.ENDED -> {
@@ -186,7 +137,6 @@ fun ViewPagerImages(
                                     currentPlayer?.isBuffering = false
                                 }
                                 PlayerState.PLAYING -> {
-                                    currentPlayingVideoIndex = page
                                     isVideoPlaying.value = true
                                     currentPlayer?.isBuffering = false
                                 }
@@ -263,16 +213,7 @@ fun ViewPagerImages(
                 Box(modifier = Modifier.fillMaxSize()) {
                     Image(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .graphicsLayer {
-                                if (pagerState.targetPage == page || pagerState.currentPage == page) {
-                                    scaleY = imageSize
-                                    scaleX = imageSize
-                                } else {
-                                    scaleY = 1f
-                                    scaleX = 1f
-                                }
-                            },
+                            .fillMaxSize(),
                         painter = painter,
                         contentScale = ContentScale.FillBounds,
                         contentDescription = ""
@@ -294,14 +235,6 @@ fun ViewPagerImages(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
-fun CoroutineScope.scrollPage(pagerState: PagerState) {
-    launch {
-        val randomDelayMillis = Random.nextInt(4, 11) * 1000L
-        delay(randomDelayMillis)
-        pagerState.animateScrollToPage(pagerState.currentPage + 1)
-    }
-}
 
 private fun CoroutineScope.onBuffered(youTubePlayer: YoutubePlayerIndexed, onBuffered: () -> Unit) {
     if (!youTubePlayer.isBuffering) onBuffered()

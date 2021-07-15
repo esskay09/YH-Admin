@@ -5,14 +5,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -25,10 +30,8 @@ import com.terranullius.yellowheartadmin.other.Constants.AB_SHARE
 import com.terranullius.yellowheartadmin.other.Constants.DIALOG_FB
 import com.terranullius.yellowheartadmin.other.Constants.DIALOG_INSTA
 import com.terranullius.yellowheartadmin.other.Constants.DIALOG_TWITTER
-import com.terranullius.yellowheartadmin.ui.components.BottomBar
-import com.terranullius.yellowheartadmin.ui.components.HelpDialog
-import com.terranullius.yellowheartadmin.ui.components.ShareDialog
-import com.terranullius.yellowheartadmin.ui.components.ViewPagerImages
+import com.terranullius.yellowheartadmin.ui.components.*
+import com.terranullius.yellowheartadmin.ui.components.edior.Editable
 import terranullius.yellowheartadmin.R
 import kotlin.math.min
 
@@ -50,13 +53,21 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
-    val isVideoPlaying = remember{
+    var updatedInitative by remember {
+        mutableStateOf(initiative)
+    }
+
+    val isVideoPlaying = remember {
+        mutableStateOf(false)
+    }
+
+    var isEditing by remember {
         mutableStateOf(false)
     }
 
     val pagerState = rememberPagerState(
         initialPage = initiative.initialPage,
-        pageCount = min(initiative.images.size,initiative.descriptions.size),
+        pageCount = min(initiative.images.size, initiative.descriptions.size),
         initialOffscreenLimit = 1,
         infiniteLoop = true
     )
@@ -98,16 +109,16 @@ fun InitiativeDetail(
 
     Scaffold(modifier = modifier, scaffoldState = scaffoldState,
         floatingActionButton = {
-                               FloatingActionButton(onClick = {
-                                   isHelpClicked.value = true
-                                   onBottomBarItemClicked(AB_HELP)
-                               }) {
-                                   Icon(
-                                       painter = painterResource(id = R.drawable.ic_heart_filled),
-                                       contentDescription = "Help",
-                                       tint = MaterialTheme.colors.primary
-                                   )
-                               }
+            FloatingActionButton(onClick = {
+                isHelpClicked.value = true
+                onBottomBarItemClicked(AB_HELP)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_heart_filled),
+                    contentDescription = "Help",
+                    tint = MaterialTheme.colors.primary
+                )
+            }
         },
         floatingActionButtonPosition = FabPosition.Center,
         isFloatingActionButtonDocked = true,
@@ -125,7 +136,12 @@ fun InitiativeDetail(
         Surface(color = MaterialTheme.colors.primary) {
             Box(
                 modifier = modifier
-                    .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = it.calculateBottomPadding())
+                    .padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        top = 8.dp,
+                        bottom = it.calculateBottomPadding()
+                    )
             ) {
                 Column(
                     modifier = Modifier
@@ -156,20 +172,41 @@ fun InitiativeDetail(
                         }
                     }
                     Spacer(Modifier.height(12.dp))
-                    InitiativeTitle(
-                        text = initiative.name,
-
-                    )
+                    Editable(
+                        isEditing,
+                        initialText = initiative.title,
+                        textStyle = MaterialTheme.typography.h4.copy(
+                            color = Color(0xFFF8E4E6),
+                            background = Color(0xFFA22B3E),
+                            fontWeight = FontWeight.Bold
+                        )
+                    ){
+                        updatedInitative.title = it
+                    }
                     Spacer(Modifier.height(14.dp))
-                    Box(modifier = Modifier.fillMaxHeight()){
-                        Text(
-                            modifier = Modifier.verticalScroll(state= scrollState),
-                            text = initiative.descriptions[pagerState.currentPage] ,
-                            style = MaterialTheme.typography.body1.copy(
+                    Box(modifier = Modifier.fillMaxHeight()) {
+                        Editable(
+                            initialText = initiative.descriptions[pagerState.currentPage],
+                            isEditing = isEditing,
+                            textStyle = MaterialTheme.typography.body1.copy(
                                 color = Color.Black,
                                 fontSize = integerResource(id = R.integer.initiative_detail_description).sp
-                            )
-                        )
+                            ),
+                            modifier = Modifier.verticalScroll(state = scrollState)
+                        ){
+                            updatedInitative.descriptions[pagerState.currentPage] = it
+                        }
+                    }
+                }
+
+                FloatingActionButton(
+                    onClick = { isEditing = !isEditing }, modifier = Modifier.align(
+                        Alignment.BottomEnd
+                    )
+                ) {
+                    Row() {
+                        Icon(Icons.Default.Edit, "")
+                        Text(text = if (isEditing) "Save" else "Edit")
                     }
                 }
             }

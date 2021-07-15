@@ -1,4 +1,4 @@
-package com.terranullius.yellowheartadmin.ui
+package com.terranullius.yellowheartadmin.ui.components
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text

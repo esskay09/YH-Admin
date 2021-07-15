@@ -28,7 +28,7 @@ data class InitiativeDto(
 
 fun InitiativeDto.toInitiative(): Initiative = Initiative(
     id = this.id,
-    name = this.name,
+    title = this.name,
     descriptions = this.descriptions,
     isPayable = this.isPayable,
     images = this.images,
