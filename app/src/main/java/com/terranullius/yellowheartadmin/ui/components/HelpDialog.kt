@@ -3,28 +3,37 @@ package com.terranullius.yellowheartadmin.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Divider
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.terranullius.yellowheartadmin.data.Initiative
+import com.terranullius.yellowheartadmin.ui.components.edior.Editable
 
 @Composable
 fun HelpDialog(
     modifier: Modifier = Modifier,
-    isDonatable: Boolean = true,
-    description: String,
-    link: String? = null,
-    onHelpClicked: (Int) -> Unit
+    onHelpClicked: (Int) -> Unit,
+    updatedInitative: MutableState<Initiative>,
+    isEditing: Boolean
 ) {
     Surface() {
         Box(modifier = modifier.padding(12.dp)) {
+
+            if (isEditing){
+                var isSwitchChecked by remember {
+                    mutableStateOf(updatedInitative.value.isDonatable)
+                }
+               Switch(modifier = Modifier.align(Alignment.TopEnd),checked = isSwitchChecked, onCheckedChange = {
+                   isSwitchChecked = it
+                   updatedInitative.value.isDonatable = it
+               })
+            }
             Column(
             ) {
                 val textFieldText = remember {
@@ -33,9 +42,11 @@ fun HelpDialog(
                 val isTextFieldTextError = remember {
                     mutableStateOf(false)
                 }
-                Text(text = description)
+                Editable(isEditing = isEditing, initialText = updatedInitative.value.helpDescription ?: "placeholder"){
+                    updatedInitative.value.helpDescription = it
+                }
                 Divider(Modifier.height(12.dp), color = Color.Transparent)
-                if (isDonatable) {
+                if (updatedInitative.value.isDonatable) {
                     OutlinedTextField(
                         isError = isTextFieldTextError.value,
                         value = textFieldText.value,
@@ -58,11 +69,18 @@ fun HelpDialog(
                             keyboardType = KeyboardType.Number
                         )
                     )
+                } else {
+                    if (isEditing){
+                        Editable(isEditing = isEditing, initialText = "Help Link", modifier = Modifier
+                            .fillMaxWidth()){
+                            updatedInitative.value.helpLink = it
+                        }
+                    }
                 }
                 Spacer(modifier = Modifier.height(2.dp))
 
                 HelpButton(modifier = Modifier.fillMaxWidth()) {
-                    if (isDonatable) {
+                    if (updatedInitative.value.isDonatable) {
                         if (!isTextFieldTextError.value && textFieldText.value.isNotBlank()) {
                             onHelpClicked(
                                 textFieldText.value.toInt()

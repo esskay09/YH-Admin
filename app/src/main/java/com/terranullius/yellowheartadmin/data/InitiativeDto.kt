@@ -29,9 +29,9 @@ data class InitiativeDto(
 fun InitiativeDto.toInitiative(): Initiative = Initiative(
     id = this.id,
     title = this.name,
-    descriptions = this.descriptions,
-    isPayable = this.isPayable,
-    images = this.images,
+    descriptions = this.descriptions as MutableList<String>,
+    isDonatable = this.isPayable,
+    images = this.images as MutableList<String>,
     order = this.order,
     shareLinks = this.shareLinks,
     helpLink = this.helpLink,

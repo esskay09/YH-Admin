@@ -5,10 +5,10 @@ data class Initiative(
     var title: String,
     var descriptions: MutableList<String>,
     var images: MutableList<String>,
-    val isPayable: Boolean = true,
+    var isDonatable: Boolean = true,
     val order: Long?,
     val shareLinks: ShareLinks,
     val initialPage: Int = 0,
-    val helpLink: String? = null,
-    val helpDescription: String? = null
+    var helpLink: String? = null,
+    var helpDescription: String? = null
 )

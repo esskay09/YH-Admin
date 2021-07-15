@@ -13,7 +13,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
@@ -31,7 +30,6 @@ import com.terranullius.yellowheartadmin.other.Constants.AB_SHARE
 import com.terranullius.yellowheartadmin.other.Constants.JOIN_LINK
 import com.terranullius.yellowheartadmin.other.Constants.RT_SPLASH
 import com.terranullius.yellowheartadmin.payment.PaymentUtils
-import com.terranullius.yellowheartadmin.ui.components.*
 import com.terranullius.yellowheartadmin.ui.theme.YellowHeartTheme
 import com.terranullius.yellowheartadmin.viewmodels.MainViewModel
 import org.greenrobot.eventbus.Subscribe
@@ -87,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                     isSignedIn = isSignedIn.value,
                     navController = navController,
                     initiatives = initiatives,
+                    viewModel = viewModel,
                     onBottomBarClicked = {
                         onBottomBarClicked(it)
                     },

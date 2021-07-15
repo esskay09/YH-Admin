@@ -1,11 +1,13 @@
 package com.terranullius.yellowheartadmin.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,7 @@ import com.terranullius.yellowheartadmin.other.Constants.DIALOG_INSTA
 import com.terranullius.yellowheartadmin.other.Constants.DIALOG_TWITTER
 import com.terranullius.yellowheartadmin.ui.components.*
 import com.terranullius.yellowheartadmin.ui.components.edior.Editable
+import com.terranullius.yellowheartadmin.viewmodels.MainViewModel
 import terranullius.yellowheartadmin.R
 import kotlin.math.min
 
@@ -42,7 +45,8 @@ fun InitiativeDetail(
     modifier: Modifier = Modifier,
     onBottomBarItemClicked: (String) -> Unit,
     onShareDialogClicked: (link: String) -> Unit,
-    onHelpClicked: (link: String?, isPayable: Boolean, amount: Int?) -> Unit
+    onHelpClicked: (link: String?, isPayable: Boolean, amount: Int?) -> Unit,
+    viewModel: MainViewModel
 ) {
     val scaffoldState = rememberScaffoldState()
     val scrollState = rememberScrollState()
@@ -53,7 +57,7 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
-    var updatedInitative by remember {
+    var updatedInitative = remember {
         mutableStateOf(initiative)
     }
 
@@ -92,14 +96,13 @@ fun InitiativeDetail(
         }) {
             HelpDialog(
                 modifier = Modifier,
-                isDonatable = initiative.isPayable,
-                link = initiative.helpLink,
-                description = initiative.helpDescription ?: "Help",
+                isEditing = isEditing,
+                updatedInitative = updatedInitative,
                 onHelpClicked = { amount ->
                     isHelpClicked.value = false
                     onHelpClicked(
                         initiative.helpLink,
-                        initiative.isPayable,
+                        initiative.isDonatable,
                         amount
                     )
                 }
@@ -126,7 +129,7 @@ fun InitiativeDetail(
             BottomBar(
                 onBottomBarItemClicked = {
                     when (it) {
-                        AB_SHARE -> isHelpClicked.value = true
+                        AB_SHARE -> isShareClicked.value = true
                     }
                     onBottomBarItemClicked(it)
                 }
@@ -140,7 +143,7 @@ fun InitiativeDetail(
                         start = 8.dp,
                         end = 8.dp,
                         top = 8.dp,
-                        bottom = it.calculateBottomPadding()
+                        bottom = it.calculateBottomPadding().plus(6.dp)
                     )
             ) {
                 Column(
@@ -157,7 +160,12 @@ fun InitiativeDetail(
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             ViewPagerImages(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clickable {
+                                        //TODO
+
+                                    },
                                 images = initiative.images,
                                 pagerState = pagerState,
                                 isVideoPlaying = isVideoPlaying
@@ -174,41 +182,41 @@ fun InitiativeDetail(
                     Spacer(Modifier.height(12.dp))
                     Editable(
                         isEditing,
-                        initialText = initiative.title,
+                        initialText = updatedInitative.value.title,
                         textStyle = MaterialTheme.typography.h4.copy(
                             color = Color(0xFFF8E4E6),
                             background = Color(0xFFA22B3E),
                             fontWeight = FontWeight.Bold
                         )
-                    ){
-                        updatedInitative.title = it
+                    ) {
+                        updatedInitative.value.title = it
                     }
                     Spacer(Modifier.height(14.dp))
                     Box(modifier = Modifier.fillMaxHeight()) {
                         Editable(
-                            initialText = initiative.descriptions[pagerState.currentPage],
+                            initialText = updatedInitative.value.descriptions[pagerState.currentPage],
                             isEditing = isEditing,
                             textStyle = MaterialTheme.typography.body1.copy(
                                 color = Color.Black,
                                 fontSize = integerResource(id = R.integer.initiative_detail_description).sp
                             ),
                             modifier = Modifier.verticalScroll(state = scrollState)
-                        ){
-                            updatedInitative.descriptions[pagerState.currentPage] = it
+                        ) {
+                            updatedInitative.value.descriptions[pagerState.currentPage] = it
                         }
                     }
                 }
 
-                FloatingActionButton(
-                    onClick = { isEditing = !isEditing }, modifier = Modifier.align(
-                        Alignment.BottomEnd
-                    )
-                ) {
-                    Row() {
-                        Icon(Icons.Default.Edit, "")
-                        Text(text = if (isEditing) "Save" else "Edit")
-                    }
-                }
+                ExtendedFloatingActionButton(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    backgroundColor = Color.Cyan,
+                    text = { Text(text = if (isEditing) "Save" else "Edit") },
+                    icon = {
+                        if (!isEditing) Icon(Icons.Default.Edit, "")
+                        else Icon(Icons.Filled.Done, "")
+                    },
+                    onClick = { isEditing = !isEditing }
+                )
             }
         }
     }

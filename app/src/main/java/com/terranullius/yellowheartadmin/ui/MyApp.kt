@@ -20,6 +20,7 @@ import com.terranullius.yellowheartadmin.other.Constants.RT_DETAIL
 import com.terranullius.yellowheartadmin.other.Constants.RT_FEED
 import com.terranullius.yellowheartadmin.other.Constants.RT_SPLASH
 import com.terranullius.yellowheartadmin.utils.Result
+import com.terranullius.yellowheartadmin.viewmodels.MainViewModel
 
 @ExperimentalPagerApi
 @Composable
@@ -29,17 +30,18 @@ fun MyApp(
     initiatives: State<Result<List<Initiative>>>,
     onBottomBarClicked: (String) -> Unit,
     onShareDialogClicked: (link: String) -> Unit,
-    onHelpClicked: (isPayable: Boolean, link: String?, amount: Int?) -> Unit
-    ) {
+    onHelpClicked: (isPayable: Boolean, link: String?, amount: Int?) -> Unit,
+    viewModel: MainViewModel
+) {
     Surface(color = MaterialTheme.colors.primary) {
 
         val selectedInitiative = remember {
             mutableStateOf(
                 Initiative(
                     title = "",
-                    descriptions = emptyList(),
-                    isPayable = true,
-                    images = emptyList(),
+                    descriptions = mutableListOf<String>(),
+                    isDonatable = true,
+                    images = mutableListOf<String>(),
                     order = 0,
                     shareLinks = ShareLinks("", "", "")
                 )
@@ -70,6 +72,7 @@ fun MyApp(
                     InitiativeDetail(
                         modifier = Modifier.fillMaxSize(),
                         initiative = selectedInitiative.value,
+                        viewModel = viewModel,
                         onBottomBarItemClicked = {
                             onBottomBarClicked(it)
                         },
