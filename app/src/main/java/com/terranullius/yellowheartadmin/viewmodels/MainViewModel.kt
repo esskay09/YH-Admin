@@ -88,9 +88,8 @@ class MainViewModel : ViewModel() {
 
     fun onGetImage(uri: Uri) {
         viewModelScope.launch {
-            _pickImage.value = null
+            uploadImageToFireStorage(uri)
         }
-        uploadImageToFireStorage(uri)
     }
 
     fun updateInitiative(initiative: Initiative) {
@@ -102,13 +101,17 @@ class MainViewModel : ViewModel() {
         )
     }
 
-    private fun uploadImageToFireStorage(uri: Uri) {
-        FirebaseStorage.getInstance().reference.child("initiatives/${uri.lastPathSegment}").putFile(uri)
+    private suspend fun uploadImageToFireStorage(uri: Uri) {
+        FirebaseStorage.getInstance().reference.child("initiatives/${uri.lastPathSegment}")
+            .putFile(uri)
+            .addOnFailureListener {
+                _pickImage.value = null
+            }
             .addOnSuccessListener {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener { downloadUri ->
-                    initiatives?.find { initiative ->
-                        initiative.id == _pickImage.value?.initiative?.id
-                    }?.let { updatedInitiative ->
+                    Log.d("fuck", "downloadUri: $downloadUri")
+                    _pickImage.value?.initiative?.let { updatedInitiative ->
+                        Log.d("fuck", "updatedInitiative: $updatedInitiative")
                         updateInitiative(updatedInitiative.copy(
                             images = updatedInitiative.images.mapIndexed { index, prevImageLink ->
                                 var newUri = prevImageLink
@@ -119,7 +122,10 @@ class MainViewModel : ViewModel() {
                                 newUri
                             } as MutableList<String>
                         ))
-                    } ?: Log.d("fuck", "No Initiative found")
+                        _pickImage.value = null
+                    } ?: Log.d("fuck", " fireStorage null")
+                }?.addOnFailureListener {
+                    _pickImage.value = null
                 }
             }
     }

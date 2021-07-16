@@ -7,7 +7,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -15,7 +15,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.terranullius.yellowheartadmin.data.Initiative
-import com.terranullius.yellowheartadmin.data.ShareLinks
 import com.terranullius.yellowheartadmin.other.Constants.RT_DETAIL
 import com.terranullius.yellowheartadmin.other.Constants.RT_FEED
 import com.terranullius.yellowheartadmin.other.Constants.RT_SPLASH
@@ -35,10 +34,17 @@ fun MyApp(
 ) {
     Surface(color = MaterialTheme.colors.primary) {
 
-        val selectedInitiative = remember {
-            mutableStateOf(
-                Initiative()
-            )
+        var selectedInitiativeId by remember{
+            mutableStateOf("")
+        }
+
+        val selectedInitiative = remember(initiatives, initiatives.value) {
+            val initiative = if (initiatives.value is Result.Success){
+                (initiatives.value as Result.Success<List<Initiative>>).data.find {
+                    it.id == selectedInitiativeId
+                } ?: Initiative()
+            } else Initiative()
+            mutableStateOf(initiative)
         }
 
         if (isSignedIn) {
@@ -56,6 +62,7 @@ fun MyApp(
                             .padding(8.dp),
                         onInitiativeClicked = {
                             selectedInitiative.value = it
+                            selectedInitiativeId = it.id
                             navController.navigate(RT_DETAIL)
                         },
                         initiatives = initiatives.value
@@ -64,7 +71,7 @@ fun MyApp(
                 composable(RT_DETAIL) {
                     InitiativeDetail(
                         modifier = Modifier.fillMaxSize(),
-                        initiative = selectedInitiative.value,
+                        initiative = selectedInitiative,
                         viewModel = viewModel,
                         onBottomBarItemClicked = {
                             onBottomBarClicked(it)

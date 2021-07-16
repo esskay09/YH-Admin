@@ -9,11 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -42,7 +38,7 @@ import kotlin.math.min
 @ExperimentalPagerApi
 @Composable
 fun InitiativeDetail(
-    initiative: Initiative,
+    initiative: MutableState<Initiative>,
     modifier: Modifier = Modifier,
     onBottomBarItemClicked: (String) -> Unit,
     onShareDialogClicked: (link: String) -> Unit,
@@ -58,8 +54,8 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
-    var updatedInitative = remember(initiative) {
-        mutableStateOf(initiative)
+    var updatedInitative = remember(initiative, initiative.value) {
+        mutableStateOf<Initiative>(initiative.value)
     }
 
     val isVideoPlaying = remember {
@@ -70,9 +66,10 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
+
     val pagerState = rememberPagerState(
-        initialPage = initiative.initialPage,
-        pageCount = min(initiative.images.size, initiative.descriptions.size),
+        initialPage = updatedInitative.value.initialPage,
+        pageCount = min(updatedInitative.value.images.size, updatedInitative.value.descriptions.size),
         initialOffscreenLimit = 1,
         infiniteLoop = true
     )
@@ -83,9 +80,9 @@ fun InitiativeDetail(
         }) {
             ShareDialog(modifier = Modifier.fillMaxWidth(), onShareClicked = {
                 when (it) {
-                    DIALOG_INSTA -> onShareDialogClicked(initiative.shareLinks.insta)
-                    DIALOG_FB -> onShareDialogClicked(initiative.shareLinks.fb)
-                    DIALOG_TWITTER -> onShareDialogClicked(initiative.shareLinks.twitter)
+                    DIALOG_INSTA -> onShareDialogClicked(updatedInitative.value.shareLinks.insta)
+                    DIALOG_FB -> onShareDialogClicked(updatedInitative.value.shareLinks.fb)
+                    DIALOG_TWITTER -> onShareDialogClicked(updatedInitative.value.shareLinks.twitter)
                 }
                 isShareClicked.value = false
             })
@@ -102,8 +99,8 @@ fun InitiativeDetail(
                 onHelpClicked = { amount ->
                     isHelpClicked.value = false
                     onHelpClicked(
-                        initiative.helpLink,
-                        initiative.isDonatable,
+                        updatedInitative.value.helpLink,
+                        updatedInitative.value.isDonatable,
                         amount
                     )
                 }
@@ -160,6 +157,9 @@ fun InitiativeDetail(
                         elevation = 18.dp
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
+                            val images = remember(updatedInitative, updatedInitative.value) {
+                                mutableStateOf(updatedInitative.value.images as List<String>)
+                            }
                             ViewPagerImages(
                                 modifier = if (isEditing) Modifier
                                     .fillMaxSize()
@@ -172,7 +172,7 @@ fun InitiativeDetail(
                                             )
                                         )
                                     } else Modifier.fillMaxSize(),
-                                images = initiative.images,
+                                images = images,
                                 pagerState = pagerState,
                                 isVideoPlaying = isVideoPlaying
                             )
