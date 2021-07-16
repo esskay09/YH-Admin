@@ -37,14 +37,7 @@ fun MyApp(
 
         val selectedInitiative = remember {
             mutableStateOf(
-                Initiative(
-                    title = "",
-                    descriptions = mutableListOf<String>(),
-                    isDonatable = true,
-                    images = mutableListOf<String>(),
-                    order = 0,
-                    shareLinks = ShareLinks("", "", "")
-                )
+                Initiative()
             )
         }
 

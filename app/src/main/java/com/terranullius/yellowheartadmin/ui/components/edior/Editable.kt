@@ -12,12 +12,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 
 @Composable
-fun Editable(isEditing: Boolean, modifier: Modifier = Modifier, initialText: String = "Placeholder", textStyle: TextStyle = LocalTextStyle.current,errorCondition: (String) -> Boolean = {false},  updatedText: (String) -> Unit = {} ) {
+fun Editable(isEditing: Boolean, modifier: Modifier = Modifier, initialText: String= "Placeholder", textStyle: TextStyle = LocalTextStyle.current,errorCondition: (String) -> Boolean = {false},  updatedText: (String) -> Unit = {} ) {
     var isTextFieldTextError by remember{
         mutableStateOf(false)
     }
-    var textFieldText by remember {
-        mutableStateOf(initialText)
+    var textFieldText by remember(initialText) {
+       mutableStateOf(initialText)
     }
     if(isEditing)TextField(
         isError = isTextFieldTextError,

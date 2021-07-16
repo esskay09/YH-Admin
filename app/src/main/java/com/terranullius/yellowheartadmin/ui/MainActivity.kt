@@ -10,12 +10,15 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.rememberNavController
@@ -32,6 +35,10 @@ import com.terranullius.yellowheartadmin.other.Constants.RT_SPLASH
 import com.terranullius.yellowheartadmin.payment.PaymentUtils
 import com.terranullius.yellowheartadmin.ui.theme.YellowHeartTheme
 import com.terranullius.yellowheartadmin.viewmodels.MainViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import terranullius.yellowheartadmin.R
@@ -42,12 +49,28 @@ import terranullius.yellowheartadmin.R
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel>()
 
+    private lateinit var imagePickerLauncher: ActivityResultLauncher<Array<String>>
+
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         FirebaseAuthUtils.registerListeners(this)
         PaymentUtils.registerListeners(this)
+
+        imagePickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()){
+            if (it!=null) viewModel.onGetImage(it)
+        }
+
+        lifecycleScope.launchWhenCreated{
+            viewModel.pickImage.collect {
+                it?.let {
+                    if (it.isUpdating){
+                        imagePickerLauncher.launch(arrayOf("image/*"))
+                    }
+                }
+            }
+        }
 
         setContent {
             val navController = rememberNavController()

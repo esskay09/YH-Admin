@@ -1,22 +1,25 @@
 package com.terranullius.yellowheartadmin.viewmodels
 
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.terranullius.yellowheartadmin.data.Initiative
 import com.terranullius.yellowheartadmin.data.InitiativeDto
 import com.terranullius.yellowheartadmin.data.toInitiative
 import com.terranullius.yellowheartadmin.data.toInitiativeDto
 import com.terranullius.yellowheartadmin.other.Constants
+import com.terranullius.yellowheartadmin.other.UpdateImageProperties
 import com.terranullius.yellowheartadmin.utils.Result
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class MainViewModel : ViewModel() {
-
-    //TODO ADD FEATURE TO LISTEN TO REFRESH LIVE
 
     private val _initiativesFlow = MutableStateFlow<Result<List<Initiative>>>(Result.Loading)
     val initiativesFlow: StateFlow<Result<List<Initiative>>>
@@ -26,38 +29,98 @@ class MainViewModel : ViewModel() {
     val isSignedInFlow: StateFlow<Boolean>
         get() = _isSignedIn
 
+    private val _pickImage = MutableStateFlow<UpdateImageProperties?>(null)
+    val pickImage: StateFlow<UpdateImageProperties?>
+        get() = _pickImage
+
+    private var initiatives: List<Initiative>? = null
+
+    private var firestoreListenerJob: Job? = null
+
     var isFirstRun = true
 
     fun onSignedIn() {
         _isSignedIn.value = true
         if (isFirstRun) {
-            refreshInitiatives()
+            if (firestoreListenerJob == null) {
+                viewModelScope.launch {
+                    firestoreListenerJob = launch {
+                        setInitiativesListener()
+                    }
+                }
+            }
             isFirstRun = false
         }
     }
 
-    private fun refreshInitiatives() {
+    private suspend fun setInitiativesListener() {
         if (_isSignedIn.value) {
-            viewModelScope.launch {
-                _initiativesFlow.value = Result.Success(getInitiatives().map {
-                    it.toInitiative()
-                }.sortedBy {
-                    it.order
-                })
+            val firestore = FirebaseFirestore.getInstance()
+            val initiativesCollectionRef = firestore.collection(Constants.COLLECTION_INITIATIVE)
+
+            initiativesCollectionRef.addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.d("fuck", "firestore listener error: $error")
+                }
+                value?.let {
+                    initiatives = it.documents.mapNotNull { documentSnapshot ->
+                        documentSnapshot.toInitiativeDto()
+                    }.map { initiativeDto ->
+                        initiativeDto.toInitiative()
+                    }.sortedBy { initiative ->
+                        initiative.order
+                    }
+                }
+                initiatives?.let {
+                    Log.d("fuck", "initiatives: $it")
+                    _initiativesFlow.value = Result.Success(it)
+                }
             }
         }
     }
 
-    private suspend fun getInitiatives(): List<InitiativeDto> {
+
+    fun getImage(updateImageProperties: UpdateImageProperties) {
+        viewModelScope.launch {
+            _pickImage.value = updateImageProperties
+        }
+    }
+
+    fun onGetImage(uri: Uri) {
+        viewModelScope.launch {
+            _pickImage.value = null
+        }
+        uploadImageToFireStorage(uri)
+    }
+
+    fun updateInitiative(initiative: Initiative) {
         val firestore = FirebaseFirestore.getInstance()
         val initiativesCollectionRef = firestore.collection(Constants.COLLECTION_INITIATIVE)
 
-        return try {
-            initiativesCollectionRef.get().await().documents.mapNotNull {
-                it.toInitiativeDto()
+        initiativesCollectionRef.document(initiative.id).set(
+            initiative.toInitiativeDto()
+        )
+    }
+
+    private fun uploadImageToFireStorage(uri: Uri) {
+        FirebaseStorage.getInstance().reference.child("initiatives/${uri.lastPathSegment}").putFile(uri)
+            .addOnSuccessListener {
+                it.metadata?.reference?.downloadUrl?.addOnSuccessListener { downloadUri ->
+                    initiatives?.find { initiative ->
+                        initiative.id == _pickImage.value?.initiative?.id
+                    }?.let { updatedInitiative ->
+                        updateInitiative(updatedInitiative.copy(
+                            images = updatedInitiative.images.mapIndexed { index, prevImageLink ->
+                                var newUri = prevImageLink
+                                if (index == _pickImage.value?.imagePosition) {
+                                    newUri = downloadUri.toString()
+                                }
+                                Log.d("fuck", "newUri: $newUri")
+                                newUri
+                            } as MutableList<String>
+                        ))
+                    } ?: Log.d("fuck", "No Initiative found")
+                }
             }
-        } catch (e: Exception) {
-            emptyList()
-        }
     }
 }

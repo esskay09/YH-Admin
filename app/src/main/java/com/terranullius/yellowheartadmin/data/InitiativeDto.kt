@@ -1,5 +1,6 @@
 package com.terranullius.yellowheartadmin.data
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.terranullius.yellowheartadmin.other.Constants.FB_FIELD_DESCRIPTION
 import com.terranullius.yellowheartadmin.other.Constants.FB_FIELD_HELP_DESCRIPTION
@@ -16,49 +17,52 @@ import java.util.*
 data class InitiativeDto(
     val id: String = UUID.randomUUID().toString(),
     val name: String,
-    val descriptions: List<String>,
+    val description: List<String>,
     @field:JvmField
     val isPayable: Boolean = true,
     val images: List<String>,
     val order: Long?,
-    val shareLinks: ShareLinks,
-    val helpLink: String? = null,
-    val helpDescription: String? = null
+    val share_insta: String,
+    val share_twitter: String,
+    val share_fb: String,
+    val help_link: String? = null,
+    val help_description: String? = null
 )
 
 fun InitiativeDto.toInitiative(): Initiative = Initiative(
     id = this.id,
     title = this.name,
-    descriptions = this.descriptions as MutableList<String>,
+    descriptions = this.description as MutableList<String>,
     isDonatable = this.isPayable,
     images = this.images as MutableList<String>,
     order = this.order,
-    shareLinks = this.shareLinks,
-    helpLink = this.helpLink,
-    helpDescription = this.helpDescription
+    shareLinks = ShareLinks(
+        fb = this.share_fb,
+        twitter = this.share_twitter,
+        insta = this.share_insta
+    ),
+    helpLink = this.help_link,
+    helpDescription = this.help_description
 )
 
 fun DocumentSnapshot.toInitiativeDto(): InitiativeDto? {
-
-    val shareLinks = ShareLinks(
-        fb = this.getString(FB_FIELD_SHARE_FB)!!,
-        insta = this.getString(FB_FIELD_SHARE_INSTA)!!,
-        twitter = this.getString(FB_FIELD_SHARE_TWITTER)!!
-    )
 
     return try {
         InitiativeDto(
             id = this.id,
             name = this.getString(FB_FIELD_NAME)!!,
-            descriptions = this.get(FB_FIELD_DESCRIPTION) as List<String>,
+            description = this.get(FB_FIELD_DESCRIPTION) as List<String>,
             images = this.get(FB_FIELD_IMAGES) as List<String>,
             isPayable = this.getBoolean(FB_FIELD_IS_PAYABLE)!!,
             order = this.getLong(FB_FIELD_ORDER),
-            shareLinks = shareLinks,
-            helpDescription = this.getString(FB_FIELD_HELP_DESCRIPTION)!!,
-            helpLink = this.getString(FB_FIELD_HELP_LINK)
+            share_fb = this.getString(FB_FIELD_SHARE_FB)!!,
+            share_insta = this.getString(FB_FIELD_SHARE_INSTA)!!,
+            share_twitter = this.getString(FB_FIELD_SHARE_TWITTER)!!,
+            help_description = this.getString(FB_FIELD_HELP_DESCRIPTION)!!,
+            help_link = this.getString(FB_FIELD_HELP_LINK)
         )
     } catch (e: Exception) {
+        Log.d("fuck","toInitiativeDtoError: ${e.message}")
         return null
     }
 }

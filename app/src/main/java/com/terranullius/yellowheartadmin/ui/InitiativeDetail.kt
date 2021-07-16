@@ -32,6 +32,7 @@ import com.terranullius.yellowheartadmin.other.Constants.AB_SHARE
 import com.terranullius.yellowheartadmin.other.Constants.DIALOG_FB
 import com.terranullius.yellowheartadmin.other.Constants.DIALOG_INSTA
 import com.terranullius.yellowheartadmin.other.Constants.DIALOG_TWITTER
+import com.terranullius.yellowheartadmin.other.UpdateImageProperties
 import com.terranullius.yellowheartadmin.ui.components.*
 import com.terranullius.yellowheartadmin.ui.components.edior.Editable
 import com.terranullius.yellowheartadmin.viewmodels.MainViewModel
@@ -57,7 +58,7 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
-    var updatedInitative = remember {
+    var updatedInitative = remember(initiative) {
         mutableStateOf(initiative)
     }
 
@@ -160,12 +161,17 @@ fun InitiativeDetail(
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             ViewPagerImages(
-                                modifier = Modifier
+                                modifier = if (isEditing) Modifier
                                     .fillMaxSize()
                                     .clickable {
-                                        //TODO
-
-                                    },
+                                        viewModel.getImage(
+                                            UpdateImageProperties(
+                                                isUpdating = true,
+                                                initiative = updatedInitative.value,
+                                                imagePosition = pagerState.currentPage
+                                            )
+                                        )
+                                    } else Modifier.fillMaxSize(),
                                 images = initiative.images,
                                 pagerState = pagerState,
                                 isVideoPlaying = isVideoPlaying
@@ -215,7 +221,12 @@ fun InitiativeDetail(
                         if (!isEditing) Icon(Icons.Default.Edit, "")
                         else Icon(Icons.Filled.Done, "")
                     },
-                    onClick = { isEditing = !isEditing }
+                    onClick = {
+                        isEditing = !isEditing
+                        if (!isEditing) {
+                                viewModel.updateInitiative(updatedInitative.value)
+                        }
+                    }
                 )
             }
         }
