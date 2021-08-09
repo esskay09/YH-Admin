@@ -12,7 +12,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 
 @Composable
-fun Editable(isEditing: Boolean, modifier: Modifier = Modifier, initialText: String= "Placeholder", textStyle: TextStyle = LocalTextStyle.current,errorCondition: (String) -> Boolean = {false},  updatedText: (String) -> Unit = {} ) {
+fun Editable(isEditing: Boolean, modifier: Modifier = Modifier, initialText: String= "Placeholder", textStyle: TextStyle = LocalTextStyle.current,label : @Composable () -> Unit = {}, errorCondition: (String) -> Boolean = {false},  updatedText: (String) -> Unit = {} ) {
     var isTextFieldTextError by remember{
         mutableStateOf(false)
     }
@@ -30,6 +30,7 @@ fun Editable(isEditing: Boolean, modifier: Modifier = Modifier, initialText: Str
                 updatedText(it)
             }
         },
+        label = label,
         modifier = modifier,
         textStyle = textStyle,
         keyboardActions =KeyboardActions{
