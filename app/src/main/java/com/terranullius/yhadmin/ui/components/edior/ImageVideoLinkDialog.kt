@@ -22,7 +22,6 @@ fun ImageVideoLinkDialog(
     onImageClick: () -> Unit,
     initialVideoLink: String = ""
 ) {
-
     Column(
         modifier = modifier
     ) {
