@@ -41,10 +41,6 @@ fun MyApp(
 ) {
     Surface(color = MaterialTheme.colors.primary) {
 
-        var isAdmin by remember {
-            mutableStateOf(false)
-        }
-
         var selectedInitiativeId by remember {
             mutableStateOf("")
         }
@@ -58,42 +54,13 @@ fun MyApp(
             mutableStateOf(initiative)
         }
 
-        val admins = viewModel.adminsFlow.collectAsState()
-
-        when (admins.value) {
-            is Result.Success -> {
-                val admin = (admins.value as Result.Success<List<AdminDto>>).data.find {
-                    it.email == getCurrentUserEmail()
-                }
-                Log.d("fuck", "adminList : ${admins.value} \n current: ${getCurrentUserEmail()}")
-                if (admin != null) {
-                    isAdmin = true
-                } else {
-                    Box(Modifier.fillMaxSize()) {
-                        ErrorComposable(
-                            modifier = Modifier.align(Alignment.Center),
-                            errorMsg = "Oops! You aren't an admin"
-                        )
-                    }
-                }
-            }
-            is Result.Error -> {
-                Box(Modifier.fillMaxSize()) {
-                    ErrorComposable(
-                        modifier = Modifier.align(Alignment.Center),
-                        errorMsg = "Oops! You aren't an admin"
-                    )
-                }
-            }
-            is Result.Loading -> CircularProgress(modifier = Modifier.fillMaxSize())
-        }
-
-        if (isSignedIn && isAdmin) {
+        if (isSignedIn) {
             NavHost(navController = navController, startDestination = RT_SPLASH) {
                 composable(RT_SPLASH) {
                     SplashScreen(
                         modifier = Modifier.fillMaxSize(),
-                        navController = navController
+                        navController = navController,
+                        viewModel = viewModel
                     )
                 }
                 composable(RT_FEED) {
