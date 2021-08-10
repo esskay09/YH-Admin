@@ -19,7 +19,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
@@ -60,7 +59,7 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
-    var isImageClicked by remember {
+    var isImageVideoPickerShown by remember {
         mutableStateOf(false)
     }
 
@@ -121,17 +120,20 @@ fun InitiativeDetail(
         }
     }
 
-    if (isImageClicked) {
+    if (isImageVideoPickerShown) {
         Dialog(
             onDismissRequest = {
-                isImageClicked = false
+                isImageVideoPickerShown = false
+                isImageSelected = false
             }) {
             ImageVideoLinkDialog(
                 modifier = Modifier.fillMaxWidth(0.9f),
                 onApplyClick = { isVideo: Boolean, videoId: String ->
                     if (isVideo) {
-                        updatedInitiative.value.images[pagerState.currentPage] = videoId
+                        updatedInitiative.value.images[pagerState.currentPage] = "youtubeID=$videoId"
                         viewModel.updateInitiative(updatedInitiative.value)
+                        isImageSelected = false
+                        isImageVideoPickerShown = false
                     } else {
                         if (!isImageSelected) {
                             viewModel.getImage(
@@ -145,6 +147,7 @@ fun InitiativeDetail(
                             viewModel.uploadImage()
                         }
                         isImageSelected = !isImageSelected
+                        isImageVideoPickerShown = false
                     }
                 }, isImageSelected = isImageSelected
             )
@@ -207,7 +210,7 @@ fun InitiativeDetail(
                                 modifier = if (isEditing) Modifier
                                     .fillMaxSize()
                                     .clickable {
-                                        isImageClicked = true
+                                        isImageVideoPickerShown = true
                                     } else Modifier.fillMaxSize(),
                                 images = images,
                                 pagerState = pagerState,

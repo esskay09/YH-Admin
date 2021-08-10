@@ -88,7 +88,7 @@ fun ImageVideoLinkDialog(
                 }
             }
         }
-        Spacer(modifier = Modifier.height(dividerDialogItemHeight.times(4)))
+        Spacer(modifier = Modifier.height(dividerDialogItemHeight.times(7)))
     }
 
 }
