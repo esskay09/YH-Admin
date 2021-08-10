@@ -103,14 +103,19 @@ fun InitiativeDetail(
         Dialog(onDismissRequest = {
             isShareClicked.value = false
         }) {
-            ShareDialog(modifier = Modifier.fillMaxWidth(), onShareClicked = {
+            ShareDialog(
+                modifier = Modifier.fillMaxWidth(),
+                shareLinks = updatedInitiative.value.shareLinks,
+                onShareClicked = {
                 when (it) {
                     DIALOG_INSTA -> onShareDialogClicked(updatedInitiative.value.shareLinks.insta)
                     DIALOG_FB -> onShareDialogClicked(updatedInitiative.value.shareLinks.fb)
                     DIALOG_TWITTER -> onShareDialogClicked(updatedInitiative.value.shareLinks.twitter)
                 }
                 isShareClicked.value = false
-            })
+            }){
+                updatedInitiative.value = updatedInitiative.value.copy(shareLinks = it)
+            }
         }
     }
     if (isHelpClicked.value) {

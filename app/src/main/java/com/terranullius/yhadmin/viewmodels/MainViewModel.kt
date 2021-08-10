@@ -93,21 +93,21 @@ class MainViewModel : ViewModel() {
     private fun getAdmins() {
         if (_isSignedIn.value) {
             val firestore = FirebaseFirestore.getInstance()
-            val initiativesCollectionRef = firestore.collection(Constants.COLLECTION_ADMIN)
+            val adminsCollectionRef = firestore.collection(Constants.COLLECTION_ADMIN)
 
-            initiativesCollectionRef.get().addOnCompleteListener { task ->
+            adminsCollectionRef.get().addOnCompleteListener { task ->
 
                 if (task.isSuccessful) {
                     task.result.let {
                         if (it != null) {
                             _adminsFlow.value = Result.Success(it.toObjects(AdminDto::class.java))
                         } else {
-                            Log.d("fuck", "firestore admin listener error")
+                            Log.d("fuck", "firestore admin listener error null")
                             _adminsFlow.value = Result.Error(NullPointerException())
                         }
                     }
                 } else {
-                    Log.d("fuck", "firestore admin listener error")
+                    Log.d("fuck", "firestore admin listener error failure ${task.exception?.message}")
                     _adminsFlow.value = Result.Error(NullPointerException())
                 }
             }

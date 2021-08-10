@@ -1,5 +1,6 @@
 package com.terranullius.yhadmin.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -64,6 +65,7 @@ fun MyApp(
                 val admin = (admins.value as Result.Success<List<AdminDto>>).data.find {
                     it.email == getCurrentUserEmail()
                 }
+                Log.d("fuck", "adminList : ${admins.value} \n current: ${getCurrentUserEmail()}")
                 if (admin != null) {
                     isAdmin = true
                 } else {
