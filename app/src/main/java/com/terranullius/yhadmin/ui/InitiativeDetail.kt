@@ -105,13 +105,16 @@ fun InitiativeDetail(
         }) {
             ShareDialog(
                 modifier = Modifier.fillMaxWidth(),
+                isEditing = isEditing,
                 shareLinks = updatedInitiative.value.shareLinks,
                 onShareClicked = {
-                when (it) {
-                    DIALOG_INSTA -> onShareDialogClicked(updatedInitiative.value.shareLinks.insta)
-                    DIALOG_FB -> onShareDialogClicked(updatedInitiative.value.shareLinks.fb)
-                    DIALOG_TWITTER -> onShareDialogClicked(updatedInitiative.value.shareLinks.twitter)
-                }
+                    if (!isEditing) {
+                        when (it) {
+                            DIALOG_INSTA -> onShareDialogClicked(updatedInitiative.value.shareLinks.insta)
+                            DIALOG_FB -> onShareDialogClicked(updatedInitiative.value.shareLinks.fb)
+                            DIALOG_TWITTER -> onShareDialogClicked(updatedInitiative.value.shareLinks.twitter)
+                        }
+                    }
                 isShareClicked.value = false
             }){
                 updatedInitiative.value = updatedInitiative.value.copy(shareLinks = it)

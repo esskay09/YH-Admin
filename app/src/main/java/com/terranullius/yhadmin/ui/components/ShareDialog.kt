@@ -81,19 +81,25 @@ fun ShareItem(
     onLinkChange: (String) -> Unit,
 
 ) {
+    val clickableModifier =  modifier
+        .fillMaxWidth(0.9f)
+        .height(60.dp)
+        .clickable {
+            val id = when (name) {
+                "Facebook" -> DIALOG_FB
+                "Twitter" -> DIALOG_TWITTER
+                "Instagram" -> DIALOG_INSTA
+                else -> ""
+            }
+            onShareClicked(id)
+        }
+
+    val unClickableModifier = modifier
+        .fillMaxWidth(0.9f)
+        .height(60.dp)
+
     Row(
-        modifier = modifier
-            .fillMaxWidth(0.9f)
-            .height(60.dp)
-            .clickable {
-                val id = when (name) {
-                    "Facebook" -> DIALOG_FB
-                    "Twitter" -> DIALOG_TWITTER
-                    "Instagram" -> DIALOG_INSTA
-                    else -> ""
-                }
-                onShareClicked(id)
-            }, verticalAlignment = Alignment.CenterVertically
+        modifier = if (isEditing) clickableModifier else unClickableModifier , verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(id = imgRes),
