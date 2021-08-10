@@ -30,6 +30,7 @@ fun ImageVideoLinkDialog(
     var isVideoChosen by remember {
     mutableStateOf(false)
 }
+
     Column() {
         Surface(shape = dialogShape) {
             var newVideoLink by remember {
@@ -58,7 +59,7 @@ fun ImageVideoLinkDialog(
 
                 Spacer(Modifier.height(dividerDialogItemHeight))
 
-                if(isVideoChosen) {
+                AnimatedVisibility(visible = isVideoChosen) {
                     Editable(
                         isEditing = true,
                         initialText = initialVideoLink,
@@ -70,9 +71,7 @@ fun ImageVideoLinkDialog(
                         })
                 }
 
-                else{
-                    Spacer(Modifier.height(dividerDialogItemHeight.times(4)))
-                }
+                    Spacer(Modifier.height(dividerDialogItemHeight.times(2)))
 
                 Box(Modifier.fillMaxWidth()) {
                     Button(
