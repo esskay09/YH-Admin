@@ -34,6 +34,7 @@ import com.terranullius.yhadmin.other.Constants.JOIN_LINK
 import com.terranullius.yhadmin.other.Constants.RT_SPLASH
 import com.terranullius.yhadmin.payment.PaymentUtils
 import com.terranullius.yhadmin.ui.theme.YellowHeartTheme
+import com.terranullius.yhadmin.utils.startSafeActivity
 import com.terranullius.yhadmin.viewmodels.MainViewModel
 import kotlinx.coroutines.flow.collect
 import org.greenrobot.eventbus.Subscribe
@@ -136,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(Intent.ACTION_VIEW).apply {
                     data = Uri.parse(JOIN_LINK)
                 }
-                startActivity(intent)
+                startSafeActivity(intent)
             }
         }
     }
@@ -148,7 +149,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW).apply {
                 data = Uri.parse(link)
             }
-            startActivity(intent)
+            startSafeActivity(intent)
         }
     }
 
@@ -161,11 +162,7 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(link)
         }
-        try {
-            startActivity(intent)
-        } catch (e: Exception){
-            Toast.makeText(this, "No app found to share", Toast.LENGTH_SHORT).show()
-        }
+        startSafeActivity(intent)
     }
 
     private fun setStatusBarColor(@ColorRes colorRes: Int, context: Context) {
