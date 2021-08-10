@@ -95,7 +95,7 @@ fun InitiativeDetail(
 
     if(isUploadingDialogShown){
         Dialog(onDismissRequest = { }, properties = DialogProperties(dismissOnClickOutside = false)) {
-             CircularProgressIndicator()
+             CircularProgressIndicator(color = MaterialTheme.colors.secondary)
         }
     }
 
