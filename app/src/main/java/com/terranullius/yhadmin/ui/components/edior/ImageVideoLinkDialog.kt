@@ -2,6 +2,8 @@ package com.terranullius.yhadmin.ui.components.edior
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -25,66 +27,87 @@ fun ImageVideoLinkDialog(
     initialVideoLink: String = "",
     isImageSelected: Boolean = false
 ) {
-    Surface(shape = dialogShape) {
-        var newVideoLink by remember {
-            mutableStateOf("")
-        }
-        var isVideoChosen by remember {
-            mutableStateOf(false)
-        }
-        Column(
-            modifier = modifier
-                .padding(dialogPadding)
-        ) {
-
-            Row() {
-                RadioButton(
-                    selected = !isVideoChosen,
-                    onClick = {
-                        isVideoChosen = false
-                    })
-                Text(text = "Image")
+    var isVideoChosen by remember {
+    mutableStateOf(false)
+}
+    Column() {
+        Surface(shape = dialogShape) {
+            var newVideoLink by remember {
+                mutableStateOf("")
             }
 
-            Spacer(Modifier.height(dividerDialogItemHeight))
+            Column(
+                modifier = modifier
+                    .padding(dialogPadding)
+                    .animateContentSize()
+            ) {
 
-            Row() {
-                RadioButton(
-                    selected = isVideoChosen,
+                ImageVideoDialogItem(
+                    text = "Image",
                     onClick = {
-                        isVideoChosen = true
-                    })
-                Text(text = "Video")
-            }
+                        isVideoChosen = false },
+                    isSelected = !isVideoChosen)
 
-            Spacer(Modifier.height(dividerDialogItemHeight))
+                Spacer(Modifier.height(dividerDialogItemHeight))
 
-
-            AnimatedVisibility(visible = isVideoChosen) {
-                Editable(
-                    isEditing = true,
-                    initialText = initialVideoLink,
-                    label = {
-                        Text(text = "videoID = ")
-                    },
-                    updatedText = {
-                        newVideoLink = it
-                    })
-            }
-            if (!isVideoChosen) Spacer(Modifier.height(dividerDialogItemHeight.times(3)))
-
-            Box(Modifier.fillMaxWidth()) {
-                Button(
-                    colors = ButtonDefaults.buttonColors(backgroundColor = secondaryColor),
-                    modifier = Modifier.align(Alignment.TopEnd),
+                ImageVideoDialogItem(
+                    text = "Video",
                     onClick = {
-                        onApplyClick(isVideoChosen, newVideoLink)
-                    }) {
-                    if (isImageSelected) Text(text = "Apply")
-                    else Text(text = "Select Image")
+                        isVideoChosen = true },
+                    isSelected = isVideoChosen)
+
+                Spacer(Modifier.height(dividerDialogItemHeight))
+
+                if(isVideoChosen) {
+                    Editable(
+                        isEditing = true,
+                        initialText = initialVideoLink,
+                        label = {
+                            Text(text = "videoID = ")
+                        },
+                        updatedText = {
+                            newVideoLink = it
+                        })
+                }
+
+                else{
+                    Spacer(Modifier.height(dividerDialogItemHeight.times(4)))
+                }
+
+                Box(Modifier.fillMaxWidth()) {
+                    Button(
+                        colors = ButtonDefaults.buttonColors(backgroundColor = secondaryColor),
+                        modifier = Modifier.align(Alignment.TopEnd),
+                        onClick = {
+                            onApplyClick(isVideoChosen, newVideoLink)
+                        }) {
+                        if (isVideoChosen){
+                            Text(text = "Apply")
+                        } else {if (isImageSelected) Text(text = "Apply")
+                        else Text(text = "Select Image")}
+                    }
                 }
             }
-
         }
+        Spacer(modifier = Modifier.height(dividerDialogItemHeight.times(4)))
+    }
+
+}
+
+@Composable
+fun ImageVideoDialogItem(text: String, onClick: () -> Unit, isSelected: Boolean) {
+    Row(
+        Modifier
+            .padding(vertical = 2.dp)
+            .clickable {
+                onClick()
+            }
+    ) {
+        RadioButton(
+            selected = isSelected,
+            onClick = onClick
+        )
+        Divider(Modifier.width(4.dp))
+        Text(text = text)
     }
 }

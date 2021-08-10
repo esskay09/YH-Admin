@@ -124,15 +124,16 @@ fun InitiativeDetail(
     if (isImageClicked) {
         Dialog(
             onDismissRequest = {
-            isImageClicked = false
-        }) {
+                isImageClicked = false
+            }) {
             ImageVideoLinkDialog(
                 modifier = Modifier.fillMaxWidth(0.9f),
-                onApplyClick = { isVideo: Boolean, link: String ->
+                onApplyClick = { isVideo: Boolean, videoId: String ->
                     if (isVideo) {
-                        //TODO
+                        updatedInitiative.value.images[pagerState.currentPage] = videoId
+                        viewModel.updateInitiative(updatedInitiative.value)
                     } else {
-                        if (!isImageSelected){
+                        if (!isImageSelected) {
                             viewModel.getImage(
                                 UpdateImageProperties(
                                     isUpdating = true,
@@ -140,13 +141,13 @@ fun InitiativeDetail(
                                     imagePosition = pagerState.currentPage
                                 )
                             )
-                        }
-                        else {
+                        } else {
                             viewModel.uploadImage()
                         }
                         isImageSelected = !isImageSelected
                     }
-                }, isImageSelected = isImageSelected)
+                }, isImageSelected = isImageSelected
+            )
         }
     }
 
