@@ -161,7 +161,11 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(link)
         }
-        startActivity(intent)
+        try {
+            startActivity(intent)
+        } catch (e: Exception){
+            Toast.makeText(this, "No app found to share", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setStatusBarColor(@ColorRes colorRes: Int, context: Context) {

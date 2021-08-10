@@ -110,6 +110,6 @@ fun ShareItem(
             Modifier
                 .width(8.dp)
         )
-        Editable(isEditing = isEditing, initialText = initialLink, updatedText = onLinkChange)
+        Editable(isEditing = isEditing, initialText = if (isEditing) initialLink else name, updatedText = onLinkChange)
     }
 }
