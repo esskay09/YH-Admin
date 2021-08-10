@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
@@ -52,6 +53,10 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
     val isHelpClicked = remember {
+        mutableStateOf(false)
+    }
+
+    var isImageSelected by remember {
         mutableStateOf(false)
     }
 
@@ -117,25 +122,31 @@ fun InitiativeDetail(
     }
 
     if (isImageClicked) {
-        Dialog(onDismissRequest = {
+        Dialog(
+            onDismissRequest = {
             isImageClicked = false
         }) {
             ImageVideoLinkDialog(
+                modifier = Modifier.fillMaxWidth(0.9f),
                 onApplyClick = { isVideo: Boolean, link: String ->
                     if (isVideo) {
                         //TODO
                     } else {
-                        viewModel.uploadImage()
+                        if (!isImageSelected){
+                            viewModel.getImage(
+                                UpdateImageProperties(
+                                    isUpdating = true,
+                                    initiative = updatedInitiative.value,
+                                    imagePosition = pagerState.currentPage
+                                )
+                            )
+                        }
+                        else {
+                            viewModel.uploadImage()
+                        }
+                        isImageSelected = !isImageSelected
                     }
-                }, onImageClick = {
-                    viewModel.getImage(
-                        UpdateImageProperties(
-                            isUpdating = true,
-                            initiative = updatedInitiative.value,
-                            imagePosition = pagerState.currentPage
-                        )
-                    )
-                })
+                }, isImageSelected = isImageSelected)
         }
     }
 

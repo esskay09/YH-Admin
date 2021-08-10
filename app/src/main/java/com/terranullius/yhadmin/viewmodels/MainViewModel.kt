@@ -104,6 +104,7 @@ class MainViewModel : ViewModel() {
     fun uploadImage(){
         viewModelScope.launch {
             selectedUri?.let { uploadImageToFireStorage(it) }
+            selectedUri = null
         }
     }
 
