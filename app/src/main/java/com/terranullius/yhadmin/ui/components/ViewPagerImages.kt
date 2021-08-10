@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.ImagePainter
 import coil.compose.rememberImagePainter
+import coil.size.Scale
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -212,6 +213,7 @@ fun ViewPagerImages(
                 } else {
                 val painter = rememberImagePainter(data = images.value[page]){
                     crossfade(true)
+                    scale(Scale.FILL)
                 }
 
                 Box(modifier = Modifier.fillMaxSize()) {

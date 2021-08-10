@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.terranullius.yhadmin.ui.theme.dividerDialogItemHeight
+import com.terranullius.yhadmin.ui.theme.secondaryColor
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -22,48 +23,56 @@ fun ImageVideoLinkDialog(
     onImageClick: () -> Unit,
     initialVideoLink: String = ""
 ) {
-    Column(
-        modifier = modifier
-    ) {
-        var newVideoLink by remember {
-            mutableStateOf("")
-        }
-        var isVideoChoosen by remember {
-            mutableStateOf(false)
-        }
-        TextButton(onClick = {
-            isVideoChoosen = false
-            onImageClick()
-        }) {
-            Text(text = "Image")
-        }
-        Divider(Modifier.height(dividerDialogItemHeight))
-        TextButton(onClick = {
-            isVideoChoosen = true
-        }) {
-            Text(text = "Video")
-        }
-        Divider(Modifier.height(dividerDialogItemHeight))
-        AnimatedVisibility(visible = isVideoChoosen) {
-            Editable(
-                isEditing = true,
-                initialText = initialVideoLink,
-                label = {
-                    Text(text = "videoID = ")
-                },
-                updatedText = {
-                    newVideoLink = it
-                })
-        }
-        Divider(Modifier.height(dividerDialogItemHeight))
-        Divider(Modifier.height(dividerDialogItemHeight))
-
-        Button(
-            modifier = Modifier.align(Alignment.End),
-            onClick = {
-                onApplyClick(isVideoChoosen, newVideoLink)
+    Surface() {
+        Column(
+            modifier = modifier
+        ) {
+            var newVideoLink by remember {
+                mutableStateOf("")
+            }
+            var isVideoChoosen by remember {
+                mutableStateOf(false)
+            }
+            Button(
+                colors = ButtonDefaults.buttonColors(backgroundColor = secondaryColor),
+                onClick = {
+                isVideoChoosen = false
+                onImageClick()
             }) {
-            Text(text = "Apply")
+                Text(text = "Image")
+            }
+            Divider(Modifier.height(dividerDialogItemHeight))
+            Button(
+                colors = ButtonDefaults.buttonColors(backgroundColor = secondaryColor),
+                onClick = {
+                isVideoChoosen = true
+            }) {
+                Text(text = "Video")
+            }
+            Divider(Modifier.height(dividerDialogItemHeight))
+            AnimatedVisibility(visible = isVideoChoosen) {
+                Editable(
+                    isEditing = true,
+                    initialText = initialVideoLink,
+                    label = {
+                        Text(text = "videoID = ")
+                    },
+                    updatedText = {
+                        newVideoLink = it
+                    })
+            }
+            Divider(Modifier.height(dividerDialogItemHeight))
+            Divider(Modifier.height(dividerDialogItemHeight))
+
+            Button(
+                colors = ButtonDefaults.buttonColors(backgroundColor = secondaryColor),
+                modifier = Modifier.align(Alignment.End),
+                onClick = {
+                    onApplyClick(isVideoChoosen, newVideoLink)
+                }) {
+                Text(text = "Apply")
+            }
         }
+
     }
 }
