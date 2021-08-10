@@ -31,6 +31,10 @@ class MainViewModel : ViewModel() {
     val pickImage: StateFlow<UpdateImageProperties?>
         get() = _pickImage
 
+    private val _imageUploadStatus = MutableStateFlow<Result<Unit>>(Result.Success(Unit))
+    val imageUploadStatus: StateFlow<Result<Unit>>
+        get() = _imageUploadStatus
+
     private var initiatives: List<Initiative>? = null
 
     private var firestoreListenerJob: Job? = null
@@ -81,15 +85,11 @@ class MainViewModel : ViewModel() {
 
 
     fun getImage(updateImageProperties: UpdateImageProperties) {
-        viewModelScope.launch {
-            _pickImage.value = updateImageProperties
-        }
+        _pickImage.value = updateImageProperties
     }
 
     fun onGetImage(uri: Uri) {
-        viewModelScope.launch {
-            selectedUri = uri
-        }
+        selectedUri = uri
     }
 
     fun updateInitiative(initiative: Initiative) {
@@ -101,22 +101,23 @@ class MainViewModel : ViewModel() {
         )
     }
 
-    fun uploadImage(){
-        viewModelScope.launch {
+    fun uploadImage() {
+            _imageUploadStatus.value= Result.Loading
             selectedUri?.let { uploadImageToFireStorage(it) }
             selectedUri = null
-        }
     }
 
-    private suspend fun uploadImageToFireStorage(uri: Uri) {
+    private fun uploadImageToFireStorage(uri: Uri) {
         FirebaseStorage.getInstance().reference.child("initiatives/${uri.lastPathSegment}")
             .putFile(uri)
             .addOnFailureListener {
                 _pickImage.value = null
+                _imageUploadStatus.value = Result.Error(NullPointerException())
             }
             .addOnSuccessListener {
                 it.metadata?.reference?.downloadUrl?.addOnSuccessListener { downloadUri ->
                     Log.d("fuck", "downloadUri: $downloadUri")
+                    _imageUploadStatus.value = Result.Success(Unit)
                     _pickImage.value?.initiative?.let { updatedInitiative ->
                         Log.d("fuck", "updatedInitiative: $updatedInitiative")
                         updateInitiative(updatedInitiative.copy(
@@ -133,6 +134,7 @@ class MainViewModel : ViewModel() {
                     } ?: Log.d("fuck", " fireStorage null")
                 }?.addOnFailureListener {
                     _pickImage.value = null
+                    _imageUploadStatus.value = Result.Error(NullPointerException())
                 }
             }
     }

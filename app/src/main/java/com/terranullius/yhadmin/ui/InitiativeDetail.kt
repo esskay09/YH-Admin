@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
@@ -32,6 +33,7 @@ import com.terranullius.yhadmin.other.UpdateImageProperties
 import com.terranullius.yhadmin.ui.components.*
 import com.terranullius.yhadmin.ui.components.edior.Editable
 import com.terranullius.yhadmin.ui.components.edior.ImageVideoLinkDialog
+import com.terranullius.yhadmin.utils.Result
 import com.terranullius.yhadmin.viewmodels.MainViewModel
 import terranullius.yhadmin.R
 import kotlin.math.min
@@ -75,6 +77,11 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
+    val uploadStatus = viewModel.imageUploadStatus.collectAsState()
+
+    var isUploadingDialogShown by remember(uploadStatus.value){
+        mutableStateOf(uploadStatus.value == Result.Loading)
+    }
 
     val pagerState = rememberPagerState(
         initialPage = updatedInitiative.value.initialPage,
@@ -85,6 +92,12 @@ fun InitiativeDetail(
         initialOffscreenLimit = 1,
         infiniteLoop = true
     )
+
+    if(isUploadingDialogShown){
+        Dialog(onDismissRequest = { }, properties = DialogProperties(dismissOnClickOutside = false)) {
+             CircularProgressIndicator()
+        }
+    }
 
     if (isShareClicked.value) {
         Dialog(onDismissRequest = {
@@ -145,11 +158,12 @@ fun InitiativeDetail(
                             )
                         } else {
                             viewModel.uploadImage()
+                            isImageVideoPickerShown = false
                         }
                         isImageSelected = !isImageSelected
-                        isImageVideoPickerShown = false
                     }
-                }, isImageSelected = isImageSelected
+                },
+                isImageSelected = isImageSelected
             )
         }
     }
@@ -214,7 +228,12 @@ fun InitiativeDetail(
                                     } else Modifier.fillMaxSize(),
                                 images = images,
                                 pagerState = pagerState,
-                                isVideoPlaying = isVideoPlaying
+                                isVideoPlaying = isVideoPlaying,
+                                onYoutubePlayerClicked = {
+                                    if(isEditing){
+                                        isImageVideoPickerShown = true
+                                    }
+                                }
                             )
                             HorizontalPagerIndicator(
                                 pagerState = pagerState, modifier = Modifier
