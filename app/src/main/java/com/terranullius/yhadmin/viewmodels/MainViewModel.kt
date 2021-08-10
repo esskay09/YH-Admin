@@ -101,6 +101,12 @@ class MainViewModel : ViewModel() {
         )
     }
 
+    fun uploadImage(){
+        viewModelScope.launch {
+            selectedUri?.let { uploadImageToFireStorage(it) }
+        }
+    }
+
     private suspend fun uploadImageToFireStorage(uri: Uri) {
         FirebaseStorage.getInstance().reference.child("initiatives/${uri.lastPathSegment}")
             .putFile(uri)

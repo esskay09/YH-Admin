@@ -14,9 +14,11 @@ import java.lang.IllegalArgumentException
 
 object FirebaseAuthUtils {
 
-    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var auth: FirebaseAuth
 
     fun registerListeners(context: Activity) {
+
+        auth = FirebaseAuth.getInstance()
 
         if (context is LifecycleOwner) {
             context.lifecycle.addObserver(object : LifecycleObserver {

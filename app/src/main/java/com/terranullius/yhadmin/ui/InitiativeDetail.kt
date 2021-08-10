@@ -31,6 +31,7 @@ import com.terranullius.yhadmin.other.Constants.DIALOG_TWITTER
 import com.terranullius.yhadmin.other.UpdateImageProperties
 import com.terranullius.yhadmin.ui.components.*
 import com.terranullius.yhadmin.ui.components.edior.Editable
+import com.terranullius.yhadmin.ui.components.edior.ImageVideoLinkDialog
 import com.terranullius.yhadmin.viewmodels.MainViewModel
 import terranullius.yhadmin.R
 import kotlin.math.min
@@ -54,7 +55,11 @@ fun InitiativeDetail(
         mutableStateOf(false)
     }
 
-    var updatedInitative = remember(initiative, initiative.value) {
+    var isImageClicked by remember {
+        mutableStateOf(false)
+    }
+
+    var updatedInitiative = remember(initiative, initiative.value) {
         mutableStateOf<Initiative>(initiative.value)
     }
 
@@ -68,8 +73,11 @@ fun InitiativeDetail(
 
 
     val pagerState = rememberPagerState(
-        initialPage = updatedInitative.value.initialPage,
-        pageCount = min(updatedInitative.value.images.size, updatedInitative.value.descriptions.size),
+        initialPage = updatedInitiative.value.initialPage,
+        pageCount = min(
+            updatedInitiative.value.images.size,
+            updatedInitiative.value.descriptions.size
+        ),
         initialOffscreenLimit = 1,
         infiniteLoop = true
     )
@@ -80,9 +88,9 @@ fun InitiativeDetail(
         }) {
             ShareDialog(modifier = Modifier.fillMaxWidth(), onShareClicked = {
                 when (it) {
-                    DIALOG_INSTA -> onShareDialogClicked(updatedInitative.value.shareLinks.insta)
-                    DIALOG_FB -> onShareDialogClicked(updatedInitative.value.shareLinks.fb)
-                    DIALOG_TWITTER -> onShareDialogClicked(updatedInitative.value.shareLinks.twitter)
+                    DIALOG_INSTA -> onShareDialogClicked(updatedInitiative.value.shareLinks.insta)
+                    DIALOG_FB -> onShareDialogClicked(updatedInitiative.value.shareLinks.fb)
+                    DIALOG_TWITTER -> onShareDialogClicked(updatedInitiative.value.shareLinks.twitter)
                 }
                 isShareClicked.value = false
             })
@@ -95,16 +103,39 @@ fun InitiativeDetail(
             HelpDialog(
                 modifier = Modifier,
                 isEditing = isEditing,
-                updatedInitative = updatedInitative,
+                updatedInitative = updatedInitiative,
                 onHelpClicked = { amount ->
                     isHelpClicked.value = false
                     onHelpClicked(
-                        updatedInitative.value.helpLink,
-                        updatedInitative.value.isDonatable,
+                        updatedInitiative.value.helpLink,
+                        updatedInitiative.value.isDonatable,
                         amount
                     )
                 }
             )
+        }
+    }
+
+    if (isImageClicked) {
+        Dialog(onDismissRequest = {
+            isImageClicked = false
+        }) {
+            ImageVideoLinkDialog(
+                onApplyClick = { isVideo: Boolean, link: String ->
+                    if (isVideo) {
+                        //TODO
+                    } else {
+                        viewModel.uploadImage()
+                    }
+                }, onImageClick = {
+                    viewModel.getImage(
+                        UpdateImageProperties(
+                            isUpdating = true,
+                            initiative = updatedInitiative.value,
+                            imagePosition = pagerState.currentPage
+                        )
+                    )
+                })
         }
     }
 
@@ -157,20 +188,14 @@ fun InitiativeDetail(
                         elevation = 18.dp
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
-                            val images = remember(updatedInitative, updatedInitative.value) {
-                                mutableStateOf(updatedInitative.value.images as List<String>)
+                            val images = remember(updatedInitiative, updatedInitiative.value) {
+                                mutableStateOf(updatedInitiative.value.images as List<String>)
                             }
                             ViewPagerImages(
                                 modifier = if (isEditing) Modifier
                                     .fillMaxSize()
                                     .clickable {
-                                        viewModel.getImage(
-                                            UpdateImageProperties(
-                                                isUpdating = true,
-                                                initiative = updatedInitative.value,
-                                                imagePosition = pagerState.currentPage
-                                            )
-                                        )
+                                        isImageClicked = true
                                     } else Modifier.fillMaxSize(),
                                 images = images,
                                 pagerState = pagerState,
@@ -188,19 +213,19 @@ fun InitiativeDetail(
                     Spacer(Modifier.height(12.dp))
                     Editable(
                         isEditing,
-                        initialText = updatedInitative.value.title,
+                        initialText = updatedInitiative.value.title,
                         textStyle = MaterialTheme.typography.h4.copy(
                             color = Color(0xFFF8E4E6),
                             background = Color(0xFFA22B3E),
                             fontWeight = FontWeight.Bold
                         )
                     ) {
-                        updatedInitative.value.title = it
+                        updatedInitiative.value.title = it
                     }
                     Spacer(Modifier.height(14.dp))
                     Box(modifier = Modifier.fillMaxHeight()) {
                         Editable(
-                            initialText = updatedInitative.value.descriptions[pagerState.currentPage],
+                            initialText = updatedInitiative.value.descriptions[pagerState.currentPage],
                             isEditing = isEditing,
                             textStyle = MaterialTheme.typography.body1.copy(
                                 color = Color.Black,
@@ -208,7 +233,7 @@ fun InitiativeDetail(
                             ),
                             modifier = Modifier.verticalScroll(state = scrollState)
                         ) {
-                            updatedInitative.value.descriptions[pagerState.currentPage] = it
+                            updatedInitiative.value.descriptions[pagerState.currentPage] = it
                         }
                     }
                 }
@@ -224,7 +249,7 @@ fun InitiativeDetail(
                     onClick = {
                         isEditing = !isEditing
                         if (!isEditing) {
-                                viewModel.updateInitiative(updatedInitative.value)
+                            viewModel.updateInitiative(updatedInitiative.value)
                         }
                     }
                 )
