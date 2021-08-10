@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.storage.FirebaseStorage
+import com.terranullius.yhadmin.data.AdminDto
 import com.terranullius.yhadmin.data.Initiative
 import com.terranullius.yhadmin.data.toInitiative
 import com.terranullius.yhadmin.data.toInitiativeDto
@@ -22,6 +24,10 @@ class MainViewModel : ViewModel() {
     private val _initiativesFlow = MutableStateFlow<Result<List<Initiative>>>(Result.Loading)
     val initiativesFlow: StateFlow<Result<List<Initiative>>>
         get() = _initiativesFlow
+
+    private val _adminsFlow = MutableStateFlow<Result<List<AdminDto>>>(Result.Loading)
+    val adminsFlow: StateFlow<Result<List<AdminDto>>>
+        get() = _adminsFlow
 
     private val _isSignedIn = MutableStateFlow(false)
     val isSignedInFlow: StateFlow<Boolean>
@@ -49,6 +55,7 @@ class MainViewModel : ViewModel() {
             if (firestoreListenerJob == null) {
                 viewModelScope.launch {
                     firestoreListenerJob = launch {
+                        getAdmins()
                         setInitiativesListener()
                     }
                 }
@@ -57,7 +64,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private suspend fun setInitiativesListener() {
+    private fun setInitiativesListener() {
         if (_isSignedIn.value) {
             val firestore = FirebaseFirestore.getInstance()
             val initiativesCollectionRef = firestore.collection(Constants.COLLECTION_INITIATIVE)
@@ -83,6 +90,29 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private fun getAdmins() {
+        if (_isSignedIn.value) {
+            val firestore = FirebaseFirestore.getInstance()
+            val initiativesCollectionRef = firestore.collection(Constants.COLLECTION_ADMIN)
+
+            initiativesCollectionRef.get().addOnCompleteListener { task ->
+
+                if (task.isSuccessful) {
+                    task.result.let {
+                        if (it != null) {
+                            _adminsFlow.value = Result.Success(it.toObjects(AdminDto::class.java))
+                        } else {
+                            Log.d("fuck", "firestore admin listener error")
+                            _adminsFlow.value = Result.Error(NullPointerException())
+                        }
+                    }
+                } else {
+                    Log.d("fuck", "firestore admin listener error")
+                    _adminsFlow.value = Result.Error(NullPointerException())
+                }
+            }
+        }
+    }
 
     fun getImage(updateImageProperties: UpdateImageProperties) {
         _pickImage.value = updateImageProperties
@@ -102,9 +132,9 @@ class MainViewModel : ViewModel() {
     }
 
     fun uploadImage() {
-            _imageUploadStatus.value= Result.Loading
-            selectedUri?.let { uploadImageToFireStorage(it) }
-            selectedUri = null
+        _imageUploadStatus.value = Result.Loading
+        selectedUri?.let { uploadImageToFireStorage(it) }
+        selectedUri = null
     }
 
     private fun uploadImageToFireStorage(uri: Uri) {
