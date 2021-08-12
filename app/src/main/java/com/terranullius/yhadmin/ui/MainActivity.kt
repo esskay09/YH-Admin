@@ -154,8 +154,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initiatePayment(amount: Int) {
-        val currentUser = FirebaseAuthUtils.getUser()
-        PaymentUtils.initiatePayment(this@MainActivity, currentUser, amount)
+        Toast.makeText(this, "Cannot use admin app to make donate", Toast.LENGTH_SHORT).show()
     }
 
     private fun onShareDialogClicked(link: String) {
@@ -169,48 +168,5 @@ class MainActivity : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(
             context, colorRes
         )
-    }
-
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
-    fun getResults(message: Events.PaymentMessage) {
-        if (message.results == PaykunHelper.MESSAGE_SUCCESS) {
-            // do your stuff here
-            // message.getTransactionId() will return your failed or succeed transaction id
-            /* if you want to get your transaction detail call message.getTransactionDetail()
-        *  getTransactionDetail return all the field from server and you can use it here as per your need
-        *  For Example you want to get Order id from detail use message.getTransactionDetail().order.orderId */
-            if (!TextUtils.isEmpty(message.transactionId)) {
-                Toast.makeText(
-                    this,
-                    "Your Transaction is succeed with transaction id : " + message.transactionId,
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.v(
-                    " order id ",
-                    " getting order id value : " + message.transactionDetail.order.orderId
-                )
-            }
-        } else if (message.results == PaykunHelper.MESSAGE_FAILED) {
-            // do your stuff here
-            Toast.makeText(this, "Your Transaction is failed", Toast.LENGTH_SHORT)
-                .show()
-        } else if (message.results == PaykunHelper.MESSAGE_SERVER_ISSUE) {
-            // do your stuff here
-            Toast.makeText(this, PaykunHelper.MESSAGE_SERVER_ISSUE, Toast.LENGTH_SHORT)
-                .show()
-        } else if (message.results == PaykunHelper.MESSAGE_ACCESS_TOKEN_MISSING
-        ) {
-            // do your stuff here
-            Toast.makeText(this, "Access Token missing", Toast.LENGTH_SHORT).show()
-        } else if (message.results == PaykunHelper.MESSAGE_MERCHANT_ID_MISSING
-        ) {
-            // do your stuff here
-            Toast.makeText(this, "Merchant Id is missing", Toast.LENGTH_SHORT).show()
-        } else if (message.results == PaykunHelper.MESSAGE_INVALID_REQUEST) {
-            Toast.makeText(this, "Invalid Request", Toast.LENGTH_SHORT).show()
-        } else if (message.results == PaykunHelper.MESSAGE_NETWORK_NOT_AVAILABLE
-        ) {
-            Toast.makeText(this, "Network is not available", Toast.LENGTH_SHORT).show()
-        }
     }
 }

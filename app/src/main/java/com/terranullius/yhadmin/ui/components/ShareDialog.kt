@@ -39,7 +39,7 @@ fun ShareDialog(
                 name = "Facebook",
                 isEditing = isEditing,
                 imgRes = R.drawable.facebook,
-                initialLink = prevShareLinks.insta,
+                initialLink = prevShareLinks.fb,
                 onShareClicked = onShareClicked
             ) {
                 prevShareLinks = prevShareLinks.copy(fb = it)
@@ -99,7 +99,7 @@ fun ShareItem(
         .height(60.dp)
 
     Row(
-        modifier = if (isEditing) clickableModifier else unClickableModifier , verticalAlignment = Alignment.CenterVertically
+        modifier = if (!isEditing) clickableModifier else unClickableModifier , verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painterResource(id = imgRes),
