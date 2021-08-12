@@ -32,7 +32,6 @@ import com.terranullius.yhadmin.other.Constants.AB_JOIN
 import com.terranullius.yhadmin.other.Constants.AB_SHARE
 import com.terranullius.yhadmin.other.Constants.JOIN_LINK
 import com.terranullius.yhadmin.other.Constants.RT_SPLASH
-import com.terranullius.yhadmin.payment.PaymentUtils
 import com.terranullius.yhadmin.ui.theme.YellowHeartTheme
 import com.terranullius.yhadmin.utils.startSafeActivity
 import com.terranullius.yhadmin.viewmodels.MainViewModel
@@ -54,7 +53,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         FirebaseAuthUtils.registerListeners(this)
-        PaymentUtils.registerListeners(this)
 
         imagePickerLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()){
             if (it!=null) viewModel.onGetImage(it)
